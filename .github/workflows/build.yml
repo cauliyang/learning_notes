@@ -7,9 +7,17 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v3
 
-      # - name: Update files
-      #   run: |
-      #     python scripts/links.py
+      # Cache for LaTeX downloads
+      - name: Cache LaTeX packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            /usr/local/share/texmf
+            /usr/local/texlive
+            /root/.texlive
+          key: ${{ runner.os }}-texlive-${{ hashFiles('**/*.tex') }}
+          restore-keys: |
+            ${{ runner.os }}-texlive-
 
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
@@ -37,3 +45,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
+
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: scinote.pdf
