@@ -2,7 +2,7 @@
 
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
 
-Welcome to my repository of learning notes.
+Welcome to my repository of [learning notes](https://github.com/cauliyang/learning_notes/blob/main/scinote-2023-08-11.pdf)
 Here, I document my journey through various subjects, capturing insights, knowledge, and reflections.
 
 ## Overview 🌐

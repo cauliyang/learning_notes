@@ -61,6 +61,10 @@ jobs:
       - name: Rename PDF with today's date
         run: mv scinote.pdf scinote-$TODAY.pdf
 
+      - name: Update README with the new PDF link
+        run: |
+          sed -i "s|https://github.com/cauliyang/learning_notes/blob/main/scinote-.*.pdf|https://github.com/cauliyang/learning_notes/blob/main/scinote-$TODAY.pdf|" README.md
+
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
