@@ -14,7 +14,7 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: "*.tex"
+          root_file: "scinote.tex"
           glob_root_file: true
           latexmk_use_lualatex: true
           latexmk_shell_escape: true
