@@ -1,5 +1,7 @@
 # My Learning Notes 📚
 
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
+
 Welcome to my repository of learning notes.
 Here, I document my journey through various subjects, capturing insights, knowledge, and reflections.
 
@@ -18,6 +20,7 @@ Research: Paper Review, etc.
 ## Structure 📂
 
 Each topic or subject has its own directory.
+\usetikzlibrary{intersections}
 Inside each directory, notes are organized by modules, chapters, or specific themes.
 Codes, diagrams, or any related assets can be found within the specific topic directory.
 
@@ -51,4 +54,16 @@ Anyone who takes the time to read, suggest edits, or contribute to these notes.
 
 ## License 📜
 
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+This work is licensed under a
+[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
+
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
+
+[cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
+
+[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg## Other Learning journey
+
+## Other Learning Journey
+
+- [Learn TIKZ](https://github.com/cauliyang/learn_tikz)
