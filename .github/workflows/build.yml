@@ -28,9 +28,18 @@ jobs:
           latexmk_shell_escape: true
           args: "-output-directory=."
 
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: scinote.pdf
+
       - name: Get current date
         id: date
         run: echo "::set-output name=today::$(date +'%Y-%m-%d')"
+
+      - name: Rename PDF with today's date
+        run: mv scinote.pdf scinote-${{ steps.date.outputs.today }}.pdf
 
       - name: Commit files
         run: |
@@ -45,9 +54,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-
-      - name: Upload PDF file
-        uses: actions/upload-artifact@v3
-        with:
-          name: PDF
-          path: scinote.pdf
