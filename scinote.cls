@@ -48,7 +48,7 @@
 
 \RequirePackage{booktabs}
 \RequirePackage{xcolor}
-\RequirePackage[automake, acronym, style=index, toc, shortcuts]{glossaries-extra}
+\RequirePackage[automake, acronym, style=super, toc, shortcuts]{glossaries-extra}
 \setabbreviationstyle[acronym]{long-short}
 
 \RequirePackage[capitalise]{cleveref}
