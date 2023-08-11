@@ -1,10 +1,91 @@
+% https://github.com/cauliyang/Machine-Learning-Session/blob/master/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E3%80%91%E3%80%90%E7%99%BD%E6%9D%BF%E6%8E%A8%E5%AF%BC%E7%B3%BB%E5%88%97%E3%80%91%E3%80%90%E5%90%88%E9%9B%86%201%EF%BD%9E23%E3%80%91.pdf
+
 \chapter{Probability}\label{chp:Probability}
 \minitoc
 
 \section{Maximum Likelihood Estimation}
 
-\gls{mle} is.
+\begin{equation}
+	\vX = (\vx_1, \vx_2, \dots, \vx_N)\transp, \vx_i = (x_{i1}, x_{i2},\dots, x_{ip})\transp
+\end{equation}
+in which $N$ is the number of samples, $p$ is the number of features.
+The data is sampled from a distribution $p\giventhat{\vx}{\theta}$, where $\theta$ is the parameter of the distribution.
+
+
+For \(N\)  i.i.d. samples, the likelihood function is \(p \giventhat{\vX}{\theta} = \prod_{i=1}^{N} p \giventhat{\vx_i}{\theta}) \)
+
+In order to get \(\theta\), we use \gls{mle}  to maximize the likelihood function.
+
+\begin{equation}
+	\theta_{\mathtt{MLE}} = \argmax_{\theta} \log p\giventhat{\vX}{\theta} = \argmax_{\theta} \sum_{i=1}^{N} \log p\giventhat{\vx_i}{\theta}
+\end{equation}
 
 \section{Maximum A Posteriori Estimation}
+In Bayes' theorem, the \(\theta\) is not a constant value, but \(\theta \sim  p(\theta) \).
+Hence,
 
-\section{Gussian Distribution}
+\begin{equation}
+	p\giventhat{\theta}{\vX} = \frac{p\giventhat{\vX}{\theta} p(\theta)}{p(\vX)}  =  \frac{p\giventhat{\vX}{\theta} p(\theta)}{\int\limits_{\theta} p\giventhat{\vX}{\theta} p(\theta) d\theta}
+\end{equation}
+
+
+In order to get \(\theta\), we use \gls{map}  to maximize the posterior function.
+
+\begin{equation}
+	\theta_{\mathtt{MAP}} = \argmax_{\theta} p\giventhat{\theta}{\vX} = \argmax_{\theta} \frac{p\giventhat{\vX}{\theta} p(\theta)}{p(\vX)}
+\end{equation}
+
+
+After \(\theta\) is estimated, then  calculating \(\frac{p\giventhat{\vX}{\theta} \cdot p(\theta)}{\int\limits_{\theta} p\giventhat{\vX}{\theta} p(\theta) d\theta}\) to get the posterior distribution.
+We can use the posterior distribution to predict the probability of a new sample \(\vx\).
+
+\begin{equation}
+	p \giventhat{x_{\mathtt{new}}}{\vX}  = \int\limits_{\theta} p\giventhat{x_{\mathtt{new}}}{\theta} \cdot p\giventhat{\theta}{\vX} d\theta
+\end{equation}
+
+\section{Gaussian Distribution}
+
+Gaussian distribution is also called normal distribution.
+
+\begin{equation}
+	\theta = (\mu, \sigma^2), \quad \mu = \frac{1}{N} \sum_{i=1}^{N} x_i, \quad \sigma^2 = \frac{1}{N} \sum_{i=1}^{N} (x_i - \mu)^2
+\end{equation}
+
+For \gls{mle},
+
+\begin{equation}
+	\theta = (\mu, \Sigma) = (\mu, \sigma^2), \quad \theta_{\mathtt{MLE}} = \argmax_{\theta} \log p\giventhat{\vX}{\theta} = \argmax_{\theta} \sum_{i=1}^{N} \log p\giventhat{\vx_i}{\theta}
+\end{equation}
+
+
+Generally, the \gls{pdf} of a Gaussian distribution is:
+
+\begin{equation}
+	p\giventhat{x}{\mu, \Sigma} =  \frac{1}{\sqrt{(2\pi)^p \det(\Sigma)}} \exp\left(-\frac{1}{2} (\vx - \mu)\transp \Sigma^{-1} (\vx - \mu)\right)
+\end{equation}
+in which \(\mu\) is the mean vector, \(\Sigma\) is the covariance matrix, \(\det\) is the determinant of matrix.
+\(\det\)  is the product of all eigenvalues of a matrix.
+
+Hence,
+
+\begin{equation}
+	\log p\giventhat{\vX}{\theta}  = \sum_{i=1}^{N} \log p\giventhat{x_i}{\theta} = \sum_{i=1}^{N} \log \frac{1}{\sqrt{(2\pi)^p \det(\Sigma)}} \exp\left(-\frac{1}{2} (\vx - \mu)\transp \Sigma^{-1} (\vx - \mu)\right)
+\end{equation}
+
+Let's only consider 1 dimension case for brevity, then
+
+\begin{equation}
+	\log p\giventhat{\vX}{\theta}  = \sum_{i=1}^{N} \log p\giventhat{x_i}{\theta} = \sum_{i=1}^{N} \log \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(-\frac{1}{2} \frac{(x - \mu)^2}{\sigma^2}\right)
+\end{equation}
+
+Let's get the optimal value for \(\mu\),
+
+\begin{equation}
+	\mu_{\mathtt{MLE}} = \argmax_{\mu} \log p\giventhat{\vX}{\theta} = \argmax_{\mu} \sum_{i=1}^{N} \left(x_i - \mu\right)^2
+\end{equation}
+
+So,
+
+\begin{equation}
+	\frac{\partial \log p\giventhat{\vX}{\theta}}{\partial \mu} = \sum_{i=1}^{N} -2 \left(x_i - \mu\right) = 0 \rightarrow \mu_{\mathtt{MLE}} = \frac{1}{N} \sum_{i=1}^{N} x_i
+\end{equation}

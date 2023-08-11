@@ -3,6 +3,29 @@
 \newcommand{\iff}{\text{ iff }}
 \newcommand{\OPT}{\textup{OPT}}
 
+
+\DeclareRobustCommand\transp{^{\mathrm{T}}}
+
+% lowercase italic for variables: x ($x$)
+% lowercase italic bold for vectors: x ($\mathbold{x}$)
+% uppercase italic bold for matrices: X ($\mathbold{X}$)
+% uppercase italic for random variables: X ($X$)
+
+\renewcommand{\vec}[1]{\ensuremath{\mathbold{#1}}}
+\newcommand{\mat}[1]{\ensuremath{\mathbold{#1}}}
+\newcommand{\vx}{\ensuremath{\vec{x}}}
+\newcommand{\vX}{\ensuremath{\mat{X}}}
+
+\DeclareMathOperator*{\argmax}{arg\!\max}
+\DeclareMathOperator*{\argmin}{arg\!\min}
+
+\makeatletter
+\newcommand{\@giventhatstar}[2]{\left(#1\;\middle|\;#2\right)}
+\newcommand{\@giventhatnostar}[3][]{#1(#2\;#1|\;#3#1)}
+\newcommand{\giventhat}{\@ifstar\@giventhatstar\@giventhatnostar}
+\makeatother
+
+
 % physics
 \newcommand{\acreation}{a^\dagger}
 
