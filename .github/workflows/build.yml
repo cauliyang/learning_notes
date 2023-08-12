@@ -28,8 +28,7 @@ jobs:
             *.alg
             *.bcf
             *.fdb_latexmk
-            *.fls
-            *.glg
+            *.fls *.glg
             *.glo
             *.gls
             *.idx
@@ -54,12 +53,6 @@ jobs:
           latexmk_use_lualatex: true
           latexmk_shell_escape: true
           args: "-output-directory=."
-
-      - name: Get current date
-        run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
-      - name: Rename PDF with today's date
-        run: mv scinote.pdf scinote-$TODAY.pdf
 
       - name: Update README with the new PDF link
         run: |
