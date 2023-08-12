@@ -1,4 +1,4 @@
-% https://github.com/cauliyang/Machine-Learning-Session/blob/master/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E3%80%91%E3%80%90%E7%99%BD%E6%9D%BF%E6%8E%A8%E5%AF%BC%E7%B3%BB%E5%88%97%E3%80%91%E3%80%90%E5%90%88%E9%9B%86%201%EF%BD%9E23%E3%80%91.pdf
+% https://github.com/cauliyang/Machine-Learning-Session/blob/master/
 
 \chapter{Probability}\label{chp:Probability}
 \minitoc
@@ -81,11 +81,51 @@ Let's only consider 1 dimension case for brevity, then
 Let's get the optimal value for \(\mu\),
 
 \begin{equation}
-	\mu_{\mathtt{MLE}} = \argmax_{\mu} \log p\giventhat{\vX}{\theta} = \argmax_{\mu} \sum_{i=1}^{N} \left(x_i - \mu\right)^2
+	\mu_{\mathtt{MLE}} = \argmax_{\mu} \log p\giventhat{\vX}{\theta} = \argmin_{\mu} \sum_{i=1}^{N} \frac{1}{2} \left(x_i - \mu\right)^2
 \end{equation}
 
 So,
 
 \begin{equation}
-	\frac{\partial \log p\giventhat{\vX}{\theta}}{\partial \mu} = \sum_{i=1}^{N} -2 \left(x_i - \mu\right) = 0 \rightarrow \mu_{\mathtt{MLE}} = \frac{1}{N} \sum_{i=1}^{N} x_i
+	\frac{\partial \log p\giventhat{\vX}{\theta}}{\partial \mu} = \sum_{i=1}^{N} \left(\mu - x_i\right) = 0 \rightarrow \mu_{\mathtt{MLE}} = \frac{1}{N} \sum_{i=1}^{N} x_i
 \end{equation}
+
+
+Let's get the optimal value for \(\sigma^2\),
+
+\begin{align*}
+	\sigma_{\mathtt{MLE}} & = \argmax_{\sigma} \log p\giventhat{\vX}{\theta}                                                                                \\
+	                      & =\argmax_{\sigma} \sum_{i=1}^{N} \log \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(-\frac{1}{2} \frac{(x - \mu)^2}{\sigma^2}\right) \\
+	                      & = \argmax_{\sigma} \sum_{i=1}^{N} \left[ - \log\sqrt{2\pi \sigma^2} - \frac{(x - \mu)^2}{2\sigma^2} \right]                     \\
+	                      & = \argmin_{\sigma} \sum_{i=1}^N \left[ \log \sigma + \frac{\left(x - \mu\right)^2}{2\sigma^2}\right]                            \\
+\end{align*}
+
+Hence,
+
+\begin{equation}
+	\frac{\partial}{\partial \sigma} \sum_{i=1}^N \left[\log \sigma + \frac{\left(x_i - \mu\right)^2}{2\sigma^2}\right] = 0 \rightarrow \sigma_{\mathtt{MLE}}^2 = \frac{1}{N} \sum_{i=1}^{N} \left(x_i - \mu\right)^2
+\end{equation}
+
+\(\mathbb{E}_{D}\left[\mu_{\mathtt{MLE}}\right]\)  is unbaised.
+
+\begin{equation}
+	\mathbb{E}_{D}\left[\mu_{\mathtt{MLE}}\right] =   \mathbb{E}_{D}\left[\frac{1}{N} \sum_{i=1}^{N} x_i\right] = \frac{1}{N} \sum_{i=1}^{N} \mathbb{E}_{D}\left[x_i\right] = \frac{1}{N} \sum_{i=1}^{N} \mu = \mu
+\end{equation}
+
+However, \(\mathbb{E}_{D}\left[\sigma_{\mathtt{MLE}}^2\right]\) is biased.
+
+\begin{align}
+	\mathbb{E}_{D}\left[\sigma_{\mathtt{MLE}}^2\right] & = \mathbb{E}_{D}\left[\frac{1}{N} \sum_{i=1}^{N} \left(x_i - \mu_{\mathtt{MLE}}\right)^2\right]                                                                                                                                                             \\
+	                                                   & = \mathbb{E}_{D}\left[\frac{1}{N} \sum_{i=1}^{N}  \left(x_i - \mu_{\mathtt{MLE}}\right)^2\right]                                                                                                                                                            \\
+	                                                   & = \mathbb{E}_{D}\left[\frac{1}{N} \sum_{i=1}^{N}  \left(x_i^2 - 2x_i \mu_{\mathtt{MLE}} + \mu_{\mathtt{MLE}}^2\right) \right] =  \mathbb{E}_{D}\left[\sum_{i=1}^{N} x_i^2 - 2 \frac{1}{N}\sum_{i=1}^{N}x_i \mu_{\mathtt{MLE}} + \mu_{\mathtt{MLE}}^2\right] \\
+	                                                   & = \mathbb{E}_{D}\left[\frac{1}{N}\sum_{i=1}^{N} \left(x_i^2 - \mu^2\right) + \mu^2 - \mu_{\mathtt{MLE}}^2 \right]                                                                                                                                           \\
+	                                                   & = \sigma^2 - \mathbb{E}_{D} \left[ \mu_{\mathtt{MLE}}^2 - \mu^2\right]                                                                                                                                                                                      \\
+	                                                   & = \sigma^2 -  \left(\mathbb{E}_{D} \left[\mu_{\mathtt{MLE}}^2\right] - \mathbb{E}_{D} \left[\mu_{\mathtt{MLE}}^2\right] \right)                                                                                                                             \\
+	                                                   & = \sigma^2 -  \mathtt{Var}\left[\mu_{\mathtt{MLE}}\right]  =  \sigma^2 - \mathtt{Var}\left[\frac{1}{N} \sum_{i=1}^N x_i \right]                                                                                                                             \\
+	                                                   & = \sigma^2 - \frac{1}{N^2} \sum_{i=1}^N \mathtt{Var}\left[x_i\right] = \frac{N-1}{N} \sigma^2                                                                                                                                                               \\
+\end{align}
+
+\section{Hidden Markov Model}
+
+
+
