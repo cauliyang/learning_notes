@@ -1,0 +1,32 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tkz-graph}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\tikzstyle{node1}=[fill={rgb,255: red,141; green,211; blue,199}, draw=black, shape=circle, line width=1pt]
+
+\begin{tikzpicture}[scale=1.2, font=\footnotesize]
+	\node [style=node1] (0) at (-2, 6.25) {a};
+	\node [style=node1] (1) at (-2, 5) {b};
+	\node [style=node1] (2) at (-3, 4) {c};
+	\node [style=node1] (3) at (-1, 4) {d};
+
+	% Double directed edge between a and b
+	\draw [-stealth, very thick, blue, shorten >=3pt, shorten <=3pt] (0) to [bend left=15] node[midway, right] {\(m_{ab}\) } (1);
+	\draw [-stealth, very thick, red, shorten >=3pt, shorten <=3pt] (1) to [bend left=15] (0);
+
+	% Double directed edge between c and b
+	\draw [-stealth, very thick, red, shorten >=3pt, shorten <=3pt] (2) to [bend left=15] (1);
+	\draw [-stealth, very thick, blue, shorten >=3pt, shorten <=3pt] (1) to [bend left=15] (2);
+
+	% Double directed edge between b and d
+	\draw [-stealth, very thick, blue, shorten >=3pt, shorten <=3pt] (1) to [bend left=15] (3);
+	\draw [-stealth, very thick, red, shorten >=3pt, shorten <=3pt] (3) to [bend left=15] (1);
+\end{tikzpicture}
+
+
+\end{document}

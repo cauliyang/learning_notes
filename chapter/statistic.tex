@@ -1,7 +1,7 @@
-% https://github.com/cauliyang/Machine-Learning-Session/blob/master/
-
 \chapter{Probability}\label{chp:Probability}
 \minitoc
+
+% https://github.com/cauliyang/Machine-Learning-Session/blob/master/
 
 \section{Maximum Likelihood Estimation}
 
@@ -125,7 +125,66 @@ However, \(\mathbb{E}_{D}\left[\sigma_{\mathtt{MLE}}^2\right]\) is biased.
 	                                                   & = \sigma^2 - \frac{1}{N^2} \sum_{i=1}^N \mathtt{Var}\left[x_i\right] = \frac{N-1}{N} \sigma^2                                                                                                                                                               \\
 \end{align}
 
-\section{Hidden Markov Model}
+
+\section{Bayesian Network} % (fold)
+\label{sec:Bayesian Network}
+
+\begin{figure}
+	\centering
+	\includestandalone[width=0.2\textwidth]{bayesian_network/simple_graph}
+	\caption{A simple Bayesian network.}\label{fig:bn_simple_graph}
+\end{figure}
+
+% section Bayesian Network (end)
+
+\section{Probability Graph} % (fold)
+\label{sec:Probability Graph}
+
+\improvement[inline]{this section is not finished yet. Need to be reviewed p54}
+
+\subsection{Variables Elimination} % (fold)
+\label{sub:Variables Elimination}
+
+% subsection Variation Elimination (end)
+
+\subsection{Belief propagation} % (fold)
+\label{sub:Belief propagation}
+
+Belief propagation is mainly used for tree data structure, and equals Section~\ref{sub:Variables Elimination} with caching.
+
+\begin{figure}
+	\centering
+	\includestandalone[width=0.3\textwidth]{bayesian_network/belief_propagation}
+	\caption{Belief propagation.}
+	\label{fig:belief_propagation}
+\end{figure}
+
+% subsection Belief propagation (end)
+
+\subsection{Max-product Algorithm} % (fold)
+\label{sub:Max-product Algorithm}
+
+% subsection Max-product Algorithm (end)
+
+\subsection{Factor Graph} % (fold)
+\label{sub:Factor Graph}
+
+% subsection Factor Graph (end)
 
 
+% section Probability Graph (end)
+\section{Expectation Maximum} % (fold)
+\label{sec:Expectation Maximum}
+
+\[
+	\Theta^{\left(t+1\right)} = \argmax_{\Theta} \int_Z \log P \giventhat{x,z}{\theta} \cdot P \giventhat{z}{x, \Theta^{\left(t\right)}} \; dz
+\]
+
+\info[inline]{continue on p60}
+
+% section Epectation Maximum (end)
+\section{Hidden Markov Model} % (fold)
+\label{sec:Hidden Markov Model}
+
+% section Hidden Markov Model (end)
 

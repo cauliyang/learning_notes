@@ -1,0 +1,21 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tkz-graph}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\tikzstyle{node1}=[fill={rgb,255: red,141; green,211; blue,199}, draw=black, shape=circle,  line width=1pt]
+
+\begin{tikzpicture}[scale=0.7, font=\footnotesize]
+	\node [style=node1] (0) at (0.25, 7) {a};
+	\node [style=node1] (1) at (-0.75, 4.75) {b};
+	\node [style=node1] (2) at (1.25, 4.75) {c};
+
+	\draw [-stealth, very thick, shorten >=3pt, shorten <=3pt] (0) to (1);
+	\draw [-stealth, very thick, shorten >=3pt, shorten <=3pt] (0) to (2);
+\end{tikzpicture}
+
+\end{document}
