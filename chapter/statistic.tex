@@ -1,8 +1,28 @@
 \chapter{Probability}\label{chp:Probability}
 \minitoc
 
-% https://github.com/cauliyang/Machine-Learning-Session/blob/master/
+\section{Basic Concepts}
 
+% https://stanford.edu/~shervine/teaching/cs-229/refresher-probabilities-statistics
+
+Permutation is an arrangement of objects in which the order is important.
+
+\[
+	P\left(n,r\right)=  \frac{n!}{\left(n-r\right)!}
+\]
+
+Combination is an arrangement of objects in which the order is not important.
+
+
+\[
+	C\left(n,r\right) = \frac{P\left(n,r\right)}{r!} = \frac{n!}{r!\left(n-r\right)!}
+\]
+
+
+in which \(0 \le r \le n\).
+
+
+% https://github.com/cauliyang/Machine-Learning-Session/blob/master/
 \section{Maximum Likelihood Estimation}
 
 \begin{equation}
@@ -173,6 +193,7 @@ Belief propagation is mainly used for tree data structure, and equals Section~\r
 
 
 % section Probability Graph (end)
+
 \section{Expectation Maximum} % (fold)
 \label{sec:Expectation Maximum}
 
@@ -181,6 +202,15 @@ Belief propagation is mainly used for tree data structure, and equals Section~\r
 \]
 
 \info[inline]{continue on p60}
+
+\section{Gaussian Mixture Model} % (fold)
+\label{sec:Gaussian Mixture Model}
+
+\[
+	Q\left(\Theta, \Theta^{\left(t\right)}\right) = \int_Z \log P \giventhat{x,z}{\theta} \cdot P \giventhat{z}{x, \Theta^{\left(t\right)}} \; dz
+\]
+
+% section Gaussian Mixture Model (end)
 
 % section Epectation Maximum (end)
 \section{Hidden Markov Model} % (fold)

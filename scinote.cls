@@ -68,6 +68,9 @@
 \RequirePackage[margin=2.3cm]{geometry}
 \headheight13.6pt
 
+% code style
+\RequirePackage{minted}
+
 %%%%%%%%%%%%%%%% thmtools %%%%%%%%%%%%%%%%%%%%%
 \RequirePackage{thmtools}
 \declaretheorem[numberwithin=chapter]{theorem}
