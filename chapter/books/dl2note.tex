@@ -10,7 +10,6 @@
 Let’s solve this analytically.
 
 To minimize the sum of squared differences, we take the derivative of the function with respect to (b), set it equal to zero, and solve for (b).
-
 The function to minimize is:
 
 \[
@@ -240,7 +239,7 @@ Shuffling large datasets on disk without too many random reads or writes can be 
 1. Pseudorandom Permutation: Use a pseudorandom permutation generator to generate a sequence of indices that represents the shuffled order of your data.
 The beauty of pseudorandom permutation generators is that they can generate the nth element of the sequence without generating the first n-1 elements, allowing for efficient random access.
 
-2. Sequential Reads and Writes: 
+2. Sequential Reads and Writes:
    - Read the data from the disk sequentially in large chunks (to benefit from sequential read speeds).
    - For each item in the chunk, use the pseudorandom permutation generator to determine its new location in the shuffled dataset.
    - Write the shuffled data back to the disk sequentially in large chunks.
@@ -292,7 +291,7 @@ dataloader = DataLoader(random_dataset, batch_size=32, shuffle=True)
 
 # Iterate over the dataloader
 for batch in dataloader:
-    print(batch.shape)  # Should print torch.Size([32, 3, 32, 32]) 
+    print(batch.shape)  # Should print torch.Size([32, 3, 32, 32])
                         # for all batches except possibly the last one
 \end{minted}
 
@@ -302,6 +301,329 @@ for batch in dataloader:
 torch.manual_seed(idx)
 \end{minted}
 
+
+\subsection{Exercise 3.5.6}
+
+\paragraph{1. How would you need to change the learning rate if you replace the aggregate loss over the minibatch with an average over the loss on the minibatch?}
+
+When you replace the aggregate loss over the minibatch with an average over the loss on the minibatch, you're essentially scaling the loss by a factor of \( \frac{1}{\text{batch size}} \).
+If you're using gradient descent or a variant thereof, the update rule is:
+
+\[ \theta_{\text{new}} = \theta_{\text{old}} - \eta \nabla L \]
+
+Where:
+- \( \theta \) represents the parameters of the model.
+- \( \eta \) is the learning rate.
+- \( \nabla L \) is the gradient of the loss function \( L \) with respect to the parameters.
+
+If you change the loss from an aggregate to an average, the gradient \( \nabla L \) will also be scaled by \( \frac{1}{\text{batch size}} \). To compensate for this scaling and to ensure that the magnitude of the parameter updates remains the same, you would need to multiply the learning rate \( \eta \) by the batch size.
+
+In other words, if your original learning rate was \( \eta_{\text{original}} \) when using aggregate loss, and you switch to using average loss, your new learning rate should be:
+
+\[ \eta_{\text{new}} = \eta_{\text{original}} \times \text{batch size} \]
+
+However, in practice, many deep learning frameworks, including TensorFlow and PyTorch, compute the average loss over a minibatch by default.
+So, if you're already using one of these frameworks, you likely don't need to adjust the learning rate when switching between aggregate and average loss, unless you were explicitly scaling the loss by the batch size yourself.
+
+\paragraph{4. What is the effect on the solution if you change the learning rate and the number of epochs? Does it keep on improving?}
+
+The learning rate and the number of epochs are two critical hyperparameters in training neural networks and other machine learning models. Their values can significantly impact the convergence and performance of the model. Let's discuss the effects of changing each:
+
+1. Learning Rate (\( \eta \)):
+   - Too High: If the learning rate is set too high, the model might overshoot the minima in the loss landscape, leading to divergence. The loss might oscillate or even explode.
+   - Too Low: If the learning rate is too low, the model will converge very slowly. It might get stuck in local minima or plateaus in the loss landscape.
+   - Adaptive: Many modern optimizers (like Adam, RMSprop) adjust the learning rate dynamically based on recent gradients, which can help in finding a good balance.
+
+2. Number of Epochs:
+   - Too Few: If the number of epochs is too low, the model might underfit the data, as it hasn't seen the data enough times to learn the underlying patterns.
+   - Too Many: If the number of epochs is too high, the model might overfit the data, especially if there isn't an early stopping mechanism or regularization in place. Overfitting means the model performs well on the training data but poorly on unseen data.
+
+Does it keep on improving?
+
+- Not necessarily. As training progresses:
+  - The loss typically decreases and the model's performance on the training set improves.
+  - However, after a certain point, the model might start to overfit, and its performance on a validation set might start to degrade.
+  - The optimal number of epochs is often where the performance on the validation set is maximized.
+
+- The learning rate plays a crucial role in this:
+  - A good learning rate can help the model converge to a good solution faster.
+  - Learning rate schedules or decay can be beneficial. Starting with a larger learning rate (to progress quickly) and reducing it over time (to fine-tune) can be effective.
+
+In summary, there's a balance to strike.
+It's essential to monitor both training and validation metrics during training to determine the best values for the learning rate and the number of epochs.
+Experimentation and hyperparameter tuning, possibly with techniques like cross-validation or Bayesian optimization, can help find the optimal values for a given problem and dataset.
+
+
+\subsection{Exercise 4.1.5}
+
+\paragraph{1. We can explore the connection between exponential families and softmax in some more depth}
+
+1. Compute the second derivative of the cross-entropy loss \(l(y, \hat{y})\) for softmax.
+2. Compute the variance of the distribution given by softmax(o) and show that it matches the second derivative computed above.
+
+1. Second Derivative of Cross-Entropy Loss for Softmax, The cross-entropy loss for softmax is given by:
+
+\[ l(y, \hat{y}) = - \sum_{i} y_i \log(\hat{y}_i) \]
+
+Where \( \hat{y}_i \) is the softmax output:
+
+\[ \hat{y}_i = \frac{\exp(o_i)}{\sum_j \exp(o_j)} \]
+
+Let's compute the second derivative with respect to the logits \( o \).
+
+First, the derivative of \( \hat{y}_i \) with respect to \( o_k \) is:
+
+\[ \frac{\partial \hat{y}_i}{\partial o_k} = \hat{y}_i (\delta_{ik} - \hat{y}_k) \]
+
+Where \( \delta_{ik} \) is the Kronecker delta (it's 1 when \( i = k \) and 0 otherwise).
+Using the above, the second derivative is:
+
+\[ \frac{\partial^2 l}{\partial o_i \partial o_k} = -\sum_j y_j \frac{\partial^2 \log(\hat{y}_j)}{\partial o_i \partial o_k} \]
+
+\[ = -\sum_j y_j \frac{\partial}{\partial o_i} \left( \frac{\hat{y}_j (\delta_{jk} - \hat{y}_k)}{\hat{y}_j} \right) \]
+
+\[ = -\sum_j y_j (\delta_{jk} - \hat{y}_k) \frac{\partial \hat{y}_j}{\partial o_i} \]
+
+\[ = -\sum_j y_j (\delta_{jk} - \hat{y}_k) \hat{y}_j (\delta_{ji} - \hat{y}_i) \]
+
+2. Variance of the Distribution Given by Softmax
+
+The variance \( \text{Var}[X] \) of a discrete random variable \( X \) with possible outcomes \( x_1, x_2, \ldots \) and probabilities \( p_1, p_2, \ldots \) is:
+
+\[ \text{Var}[X] = \sum_i p_i (x_i - \mathbb{E}[X])^2 \]
+
+For the softmax distribution, \( X \) can take on values corresponding to the logits \( o \) with probabilities \( \hat{y} \). Thus, the variance becomes:
+
+\[ \text{Var}[X] = \sum_i \hat{y}_i (o_i - \mathbb{E}[X])^2 \]
+
+Where \( \mathbb{E}[X] = \sum_i \hat{y}_i o_i \).
+
+Now, the second derivative of the cross-entropy loss with respect to the logits, as derived above, gives us a measure of the curvature of the loss.
+When we compare this with the variance of the softmax distribution, we can see that they are related. The variance captures the spread of the logits, and the second derivative captures the sensitivity of the loss to changes in the logits. In the context of exponential families, this relationship between variance and the second derivative of the log-likelihood is a known property.
+
+To show that they match, one would equate the expressions derived in the two sections above and simplify.
+The detailed algebra can be quite involved, but the key insight is understanding the relationship between the curvature of the loss (second derivative) and the spread of the logits (variance).
+
+
+\paragraph{5. Softmax gets its name from the following mapping: \(RealSoftMax(a, b) = log(exp(a) + exp(b))\)}
+
+1. Prove that \( \text{RealSoftMax}(a, b) > \max(a, b) \):
+
+Given:
+\[ \text{RealSoftMax}(a, b) = \log(\exp(a) + \exp(b)) \]
+
+Now, since \( \exp(a) \) and \( \exp(b) \) are both positive, we have:
+\[ \exp(a) + \exp(b) > \exp(a) \]
+\[ \exp(a) + \exp(b) > \exp(b) \]
+
+Taking the logarithm of both sides (logarithm is a monotonically increasing function):
+\[ \log(\exp(a) + \exp(b)) > \log(\exp(a)) = a \]
+\[ \log(\exp(a) + \exp(b)) > \log(\exp(b)) = b \]
+
+Thus, \( \text{RealSoftMax}(a, b) > \max(a, b) \).
+
+2. How small can you make the difference between both functions?
+
+Without loss of generality, let's set \( b = 0 \) and \( a \geq b \). Then:
+\[ \text{RealSoftMax}(a, 0) = \log(\exp(a) + 1) \]
+
+The difference between the two functions is:
+\[ \text{RealSoftMax}(a, 0) - a = \log(\exp(a) + 1) - a \]
+
+As \( a \) becomes large, the difference approaches 0, but it's always positive because of the "+1" inside the logarithm.
+
+3. Prove that this holds for \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) \), provided that \( \lambda > 0 \):
+
+Given:
+\[ \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) = \lambda^{-1} \log(\exp(\lambda a) + \exp(\lambda b)) \]
+
+Using the property of logarithms:
+\[ = \log(\exp(\lambda a) + \exp(\lambda b))^{\lambda^{-1}} \]
+
+Since \( \exp(\lambda a) \) and \( \exp(\lambda b) \) are both positive and \( \lambda > 0 \), the proof from part 1 applies here as well, and we can conclude that \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) > \max(a, b) \).
+
+4. Show that for \( \lambda \to \infty \) we have \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) \to \max(a, b) \):
+
+As \( \lambda \) becomes very large, the term \( \exp(\lambda a) \) will dominate \( \exp(\lambda b) \) if \( a > b \). Thus:
+\[ \lambda^{-1} \log(\exp(\lambda a) + \exp(\lambda b)) \approx \lambda^{-1} \log(\exp(\lambda a)) = a \]
+
+Similarly, if \( b > a \), the result will be \( b \). Therefore, as \( \lambda \to \infty \), \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) \to \max(a, b) \).
+
+5. Construct an analogous softmin function:
+
+The softmin function can be constructed using the negative of the inputs to the softmax function:
+\[ \text{RealSoftMin}(a, b) = -\text{RealSoftMax}(-a, -b) \]
+\[ = \log(\exp(-a) + \exp(-b)) \]
+
+6. Extend this to more than two numbers:
+
+For \( n \) numbers \( a_1, a_2, \ldots, a_n \):
+\[ \text{RealSoftMax}(a_1, a_2, \ldots, a_n) = \log(\exp(a_1) + \exp(a_2) + \ldots + \exp(a_n)) \]
+
+Similarly, the softmin for \( n \) numbers is:
+\[ \text{RealSoftMin}(a_1, a_2, \ldots, a_n) = \log(\exp(-a_1) + \exp(-a_2) + \ldots + \exp(-a_n)) \]
+
+\subsection{Exercise 4.5.5}
+
+\paragraph{Deep learning uses many different number formats, including FP64 double precision (used extremely rarely), FP32 single precision, BFLOAT16 (good for compressed representations), FP16 (very unstable), TF32 (a new format from NVIDIA), and INT8. Compute the smallest and largest argument of the exponential function for which the result does not lead to numerical underflow or overflow}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lrrrrrrr}
+\toprule
+format & format\_min & format\_max & exp\_min & exp\_max & test\_min & exp(max-1) & exp(max+1) \\
+\midrule
+torch.float64 & -1.80e+308 & 1.80e+308 & -1.80e+308 & 7.10e+02 & 0.00e+00 & 6.61e+307 & inf \\
+torch.float32 & -3.40e+38 & 3.40e+38 & -3.40e+38 & 8.87e+01 & 0.00e+00 & 1.25e+38 & inf \\
+torch.bfloat16 & -3.39e+38 & 3.39e+38 & -3.39e+38 & 8.85e+01 & 0.00e+00 & 1.00e+38 & inf \\
+torch.float16 & -6.55e+04 & 6.55e+04 & -6.55e+04 & 1.11e+01 & 0.00e+00 & 2.41e+04 & inf \\
+torch.int8 & -1.28e+02 & 1.27e+02 & -1.28e+02 & 4.84e+00 & 0.00e+00 & 4.67e+01 & 8.90e+01 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+1. FP64 (Double Precision):
+    - Smallest positive normalized number \(2^{-1022}\)
+    - Largest finite representable number \( (2-2^{-52}) \times 2^{1023} \)
+    - For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-1022 \log(2), 1023 \log(2)]\).
+
+2. FP32 (Single Precision):
+   - Smallest positive normalized number: \(2^{-126}\)
+   - Largest finite representable number: \( (2-2^{-23}) \times 2^{127} \)
+   - For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-126 \log(2), 127 \log(2)]\).
+
+3. BFLOAT16:
+   - This format has the same exponent bits as FP32 but fewer precision bits.
+   - The range for the exponential function would be similar to FP32.
+
+4. FP16:
+   - Smallest positive normalized number: \(2^{-14}\)
+   - Largest finite representable number: \( (2-2^{-10}) \times 2^{15} \)
+   - For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-14 \log(2), 15 \log(2)]\).
+
+5. TF32:
+   - This is a new format introduced by NVIDIA, and it has 10 bits for the exponent and 19 bits for the fraction.
+   - The range would be somewhere between FP32 and FP16.
+
+6. INT8:
+   - This is an integer format, so it doesn't directly apply to the exponential function in the same way as the floating-point formats. However, if used in quantized neural networks, the range would be \([-128, 127]\).
+
+For the exact ranges, especially for the newer formats like TF32, one would need to refer to the official documentation or specifications provided by the manufacturers.
+
+To avoid overflow or underflow when computing the exponential function, it's common to clip or bound the input values to the function within the safe range for the given number format.
+
+\subsection{Exercise 7.1.6}
+
+\paragraph{1. Assume that the size of the convolution kernel is \(\Delta = 0 \). Show that in this case the convolution kernel implements an MLP independently for each set of channels. This leads to the Network in Network architectures}
+
+When the size of the convolution kernel is \( \Delta = 0 \), it means that the kernel effectively has a size of \( 1 \times 1 \).
+A \( 1 \times 1 \) convolution kernel operates on each pixel individually, without considering its neighbors.
+
+Let's break down the implications of this:
+
+1. Independent Operation on Each Pixel: A \( 1 \times 1 \) convolution operates on each pixel independently. For an input with \( C_{in} \) channels, each pixel is represented by a \( C_{in} \)-dimensional vector. The \( 1 \times 1 \) convolution transforms this \( C_{in} \)-dimensional vector into a \( C_{out} \)-dimensional vector, where \( C_{out} \) is the number of output channels.
+
+2. MLP for Each Set of Channels: The transformation from \( C_{in} \) to \( C_{out} \) for each pixel can be viewed as a fully connected layer (or MLP) applied independently to each spatial location. This is because the weights of the \( 1 \times 1 \) convolution kernel can be seen as the weights of a fully connected layer that connects each input channel to each output channel.
+
+3. Network in Network (NiN): The idea of using \( 1 \times 1 \) convolutions to implement an MLP for each set of channels led to the Network in Network (NiN) architecture. In NiN, multiple \( 1 \times 1 \) convolutional layers are stacked, allowing for deep per-pixel transformations. This introduces additional non-linearity for each pixel without changing the spatial dimensions.
+
+In summary, a \( 1 \times 1 \) convolution kernel effectively applies an MLP to each pixel independently, transforming the channels at each spatial location.
+This concept is central to the Network in Network (NiN) architecture, which uses \( 1 \times 1 \) convolutions to introduce additional non-linearities in the network without altering the spatial dimensions.
+
+\paragraph{5. What happens with convolutions when an object is at the boundary of an image?}
+
+When an object is at the boundary of an image, and we apply convolutions, several issues and considerations arise:
+
+1. Loss of Information: The primary issue is that for pixels on the boundary, there aren't enough neighboring pixels to apply the convolution kernel fully. This means that these boundary pixels might not be processed adequately, leading to potential loss of information about objects at the image boundary.
+
+2. Padding: To address the boundary issue, one common approach is to add padding around the image. Padding involves adding extra pixels around the boundary of the image. There are different types of padding:
+   - Zero Padding: Adding pixels with a value of zero.
+   - Reflect Padding: The boundary pixels are reflected. For instance, if the last row of an image is \([a, b, c]\), it becomes \([a, b, c, c, b, a]\) after reflect padding.
+   - Replicate Padding: The boundary pixels are replicated. Using the previous example, it becomes \([a, b, c, c, c, c]\).
+
+   Padding ensures that every pixel, including those on the boundary, has a full neighborhood of pixels to apply the convolution kernel.
+
+3. Valid vs. Same Convolutions:
+   - Valid Convolution: No padding is used. The resulting feature map after convolution is smaller than the input image because the kernel can only be applied to positions where it fits entirely within the image boundaries.
+   - Same Convolution: Padding is added such that the output feature map has the same spatial dimensions as the input image.
+
+4. Edge Effects: Even with padding, objects at the boundary might be affected differently than objects in the center of the image. This is because the artificial values introduced by padding might not represent the actual image content. This can lead to edge artifacts in the output feature map.
+
+5. Dilated Convolutions: In dilated convolutions, where the kernel elements are spaced out by introducing gaps, the boundary effects can be even more pronounced, especially if the dilation rate is high.
+
+6. Pooling Layers: The boundary effects can also impact pooling layers (like max-pooling or average-pooling). If the pooling window doesn't fit entirely within the image or feature map boundaries, padding might be needed, or the pooling window might be truncated.
+
+\paragraph{6. Prove that the convolution is symmetric, \(f * g = g * f\)}
+
+To prove that convolution is symmetric, we'll start with the definition of the convolution operation for two functions \( f(t) \) and \( g(t) \):
+
+\[ (f * g)(t) = \int_{-\infty}^{\infty} f(\tau) g(t - \tau) \, d\tau \]
+
+Now, let's express the convolution of \( g \) and \( f \):
+
+\[ (g * f)(t) = \int_{-\infty}^{\infty} g(\tau) f(t - \tau) \, d\tau \]
+
+To show that these two expressions are equivalent, we'll make a substitution:
+
+Let \( \lambda = t - \tau \)
+This implies \( d\lambda = -d\tau \)
+
+When \( \tau = -\infty \), \( \lambda = t + \infty = \infty \)
+When \( \tau = \infty \), \( \lambda = t - \infty = -\infty \)
+
+Substituting these values into the convolution of \( g \) and \( f \), we get:
+
+\[ (g * f)(t) = \int_{\infty}^{-\infty} g(t - \lambda) f(\lambda) (-d\lambda) \]
+
+Now, reversing the limits of integration:
+
+\[ (g * f)(t) = \int_{-\infty}^{\infty} g(t - \lambda) f(\lambda) \, d\lambda \]
+
+Comparing this with the expression for \( (f * g)(t) \), we see that the two expressions are equivalent:
+
+\[ (f * g)(t) = (g * f)(t) \]
+
+Thus, we've proven that the convolution operation is symmetric:
+
+\[ f * g = g * f \]
+
+
+\paragraph{Exercise 7.2.8}
+
+\paragraph{4. How do you represent a cross-correlation operation as a matrix multiplication by changing the input and kernel tensors?}
+
+Cross-correlation can be represented as a matrix multiplication by converting the input and kernel tensors into appropriate matrix and vector forms, respectively.
+This process is often referred to as ``toeplitzization'' or ``im2col'' (image to column) transformation. Here's how you can achieve this:
+
+1. Flatten the Kernel:
+    - First, you reshape the kernel into a column vector.
+    - If the kernel is of size \( k \times k \), the resulting vector will be of size \( k^2 \times 1 \).
+
+2. Toeplitz Matrix for Input:
+    - For each position in the output, extract a \( k \times k \) patch from the input, and flatten it into a row vector.
+    - Stack these row vectors on top of each other to form a matrix. This matrix has a special structure called a Toeplitz matrix.
+    - If the input is of size \( n \times n \) and the kernel is \( k \times k \), then the resulting matrix will be of size \( \left(n-k+1\right)^2   \times k^2 \).
+
+3. Matrix Multiplication:
+    - Multiply the Toeplitz matrix (from step 2) with the flattened kernel (from step 1). The result will be a column vector representing the flattened output of the cross-correlation operation.
+    - Reshape this column vector back into a 2D matrix to get the final output.
+
+Mathematically, if \( M \) is the Toeplitz matrix derived from the input and \( K \) is the column vector derived from the kernel, then the output \( O \) is given by:
+
+\[ O = M \times K \]
+
+This representation is particularly useful for certain computational platforms and algorithms that can efficiently handle matrix multiplications.
+In deep learning frameworks, this transformation is often used under the hood to speed up convolution operations, especially when using GPUs.
+
+Note: This explanation assumes 2D inputs and kernels for simplicity, but the concept can be extended to higher dimensions.
+
+\begin{minted}{python}
+def im2col(inputs, kernel_size):
+    # Extract patches from the input tensor
+    k, _ = kernel_size
+    unfold = torch.nn.Unfold(kernel_size=k, stride=1, padding=0)
+    cols = unfold(inputs)
+    return cols.transpose(1, 2)
+\end{minted}
+
 % section Linear Neural Networks (end)
-
-

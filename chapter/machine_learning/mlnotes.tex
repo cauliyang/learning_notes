@@ -7,13 +7,37 @@
 Assume $A$ is $m\times n$ and $B$ is $n\times p$.
 The naive algorithm takes $O\left(mnp\right)$ time.
 
-% section Complexity of matrix multiply (end)
 
 
 \section{Representation of matrix} % (fold)
 \label{sec:Representation of matrix}
 
 row major, col major, stride
+
+
+\paragraph{How to calculate dimension of convolutional layer} % (fold)
+
+\[ \left\lfloor \frac{n_h - k_h + p_h + s_h}{s_h} \right\rfloor \times \left\lfloor \frac{n_w - k_w + p_w + s_w}{s_w} \right\rfloor \]
+In which  \(n_h\)  means height of input, \(k_h\) means height of filter, \(p_h\) means padding of height, \(s_h\) means stride of height. So as \(n_w\), \(k_w\), \(p_w\), \(s_w\).
+
+
+\section{Training skills} % (fold)
+\label{sec:Training skills}
+
+
+\paragraph{Batch normalization}
+
+\[
+    \mathrm{BN}(\bm{x})  = \gamma  \odot \frac{\bm{x} - \hat{\bm \mu}_\mathcal{B}}{\hat{\bm \sigma}_\mathcal{B}} + \beta
+\]
+
+in which,
+
+
+% section Training skills (end)
+
+
+
 
 % section Representation of matrix (end)
 
