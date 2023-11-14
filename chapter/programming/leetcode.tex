@@ -1,0 +1,452 @@
+\chapter{Leetcode}\label{chp:leetcode}
+\minitoc
+
+\section{Problems Sets}
+
+
+\begin{itemize}
+	\item \url{https://leetcode.com/list/rab78cw1/ https://www.techinterviewhandbook.org/grind75?weeks=8}
+	\item dfs recursive = bfs iterative (use stack)
+	\item two pointer
+	\item check size (is\_empty, compare, larger, .etc.)
+	\item hash map (fixed array)
+\end{itemize}
+
+\section{Tips}
+
+\begin{itemize}
+	\item postorder: LRN
+	\item preorder: NLR
+	\item inorder: LNR
+	\item virtual head pointers
+	\item two pointers (left and right, fast and slow)
+	\item BST (value of left child is smaller, that of right child is larger)
+	\item Backtracking (terminated option, available paths, current paths, if has
+	\item duplicates(available paths or result))
+	\item BFS (queue;while;for)
+	\item sliding windows (tow pointers) for substring problems
+	\item best-time-to-buy-and-sell-template.cpp
+	\item (p + m - 1) / m equal to ceil(p / m)
+	\item be careful about int overflow and underflow
+	\item binary search problem: 1. left, right, f(x) increase/decrease, target
+\end{itemize}
+
+\section{Problems}
+
+\subsection{ 1 Two Sum}
+
+\begin{itemize}
+	\item hash map
+\end{itemize}
+
+\subsection{20 valid parentheses}
+
+\begin{itemize}
+	\item  stack
+\end{itemize}
+
+\subsection{21 Merge Two Sorted List}
+
+\begin{itemize}
+	\item  recursive
+\end{itemize}
+
+\subsection{121 Best time to buy and sell stock}
+
+\begin{itemize}
+	\item record value
+\end{itemize}
+
+\subsection{226 Invert Binary Tree}
+
+\begin{itemize}
+	\item DFS recursive
+	\item BFS iterative via stack
+\end{itemize}
+
+\subsection{242 Valid Anagram}
+
+\begin{itemize}
+	\item count freq then verify freq
+\end{itemize}
+
+\subsection{704 Binary Search}
+\begin{itemize}
+	\item two pointers
+\end{itemize}
+
+\subsection{733 Flood Fill}
+
+\begin{itemize}
+	\item graph matrix
+	\item DFS via recursive or BFS via iterative
+\end{itemize}
+
+\subsection{235 lowest-common-ancestor-of-a-binary-search-tree}
+
+\begin{itemize}
+	\item Attributes of BST, the value of left subtree is less than root, that of left larger than root.
+	\item Recursive
+	\item iterative
+\end{itemize}
+
+\subsection{110 balanced-binary-tree}
+
+\begin{itemize}
+	\item recursive DFS
+	\item use -1 means unbalanced
+\end{itemize}
+
+\subsection{141 linked-list-cycle}
+
+\begin{itemize}
+	\item two points fast and slow
+	\item check if they meet again
+
+\end{itemize}
+
+\subsection{232 implement-queue-using-stacks}
+
+\begin{itemize}
+	\item Two stacks, input and output
+	\item move when output is empty
+	\item amortized cost for each operation is O(1).
+\end{itemize}
+
+\subsection{278 first-bad-version}
+
+\begin{itemize}
+	\item Binary Search
+	\item use val directly instead of index
+\end{itemize}
+
+\subsection{383 ransom-note}
+
+\begin{itemize}
+	\item hash map (fixed array)
+	\item check size first
+\end{itemize}
+
+\subsection{70 climbing-stairs}
+
+\begin{itemize}
+	\item Fibonacci like
+	\item recursive (from top to down, memorization)
+	\item iterative (from bottom to top, space O(1))
+\end{itemize}
+
+\subsection{409 longest-palindrome}
+
+\begin{itemize}
+	\item use even char freq
+	\item cal odd char freq (s.size() - odd + (odd >0))
+\end{itemize}
+
+\subsection{206 reverse-linked-list}
+
+\begin{itemize}
+	\item recursive
+	\item iterative (three pointes (prev, curr,next))
+\end{itemize}
+
+\subsection{169 majority-element}
+
+\begin{itemize}
+	\item moorse vote
+\end{itemize}
+
+\subsection{67 add-binary}
+
+\begin{itemize}
+	\item carry
+	\item ASCII to int, vicewise
+\end{itemize}
+
+\subsection{543 diameter-of-binary-tree}
+
+\begin{itemize}
+	\item postorder traversal
+\end{itemize}
+
+\subsection{876 middle-of-the-linked-list}
+
+\begin{itemize}
+	\item fast and slow pointers
+	\item get n and n/2 at same time
+\end{itemize}
+
+\subsection{104 maximum-depth-of-binary-tree}
+
+\begin{itemize}
+	\item DFS recursive
+	\item postorder
+\end{itemize}
+
+\subsection{217 contains-duplicate}
+
+\begin{itemize}
+	\item Hash set
+	\item unorder\_map to hash map
+	\item map to BST
+\end{itemize}
+
+\subsection{53 maximum-subarray}
+
+\begin{itemize}
+	\item DP
+	\item use subproblem to fix global problem
+\end{itemize}
+
+\subsection{57 insert-interval}
+
+\begin{itemize}
+	\item three situations
+	\item not|overlap|not
+\end{itemize}
+
+\subsection{542 01-matrix}
+
+\begin{itemize}
+	\item DP first left top, then bottom, right
+	\item BFS, first 0, then unseen
+\end{itemize}
+
+\subsection{973 k-closest-points-to-origin}
+
+\begin{itemize}
+	\item sort/n\_element/partial\_sort
+	\item max-heap
+	\item randomized quicksort
+\end{itemize}
+
+\subsection{3 longest-substring-without-repeating-characters}
+
+\begin{itemize}
+	\item slide window (two points)
+\end{itemize}
+
+\subsection{15 3sum}
+
+\begin{itemize}
+	\item sort
+	\item two points
+\end{itemize}
+
+\subsection{102 binary-tree-level-order-traversal}
+
+\begin{itemize}
+	\item stack/queue BFS
+	\item DFS recursive / keep level
+\end{itemize}
+
+\subsection{133 clone-graph}
+
+\begin{itemize}
+	\item DFS
+	\item Amazing
+\end{itemize}
+
+\subsection{207 course-schedule}
+
+\begin{itemize}
+	\item \url{https://www.geeksforgeeks.org/kahns-algorithm-vs-dfs-approach-a-comparative-analysis/}
+	\item BFS kahn's algorithm topological sort
+	\item DFS better for larger V
+	\item topological sort
+\end{itemize}
+
+\subsection{322 coin-change}
+
+\begin{itemize}
+	\item DP
+\end{itemize}
+
+\subsection{238 product-of-array-except-self}
+
+\begin{itemize}
+	\item prefix
+	\item suffix
+	\item space O(1)
+\end{itemize}
+
+\subsection{155 min-stack}
+
+\begin{itemize}
+	\item keep value and min at the same time
+\end{itemize}
+
+\subsection{98 validate-binary-search-tree}
+
+\begin{itemize}
+	\item Recursive
+\end{itemize}
+
+\subsection{200 number-of-islands}
+
+\begin{itemize}
+	\item find 1 and DFS clear 1
+\end{itemize}
+
+\subsection{33 search-in-rotated-sorted-array}
+
+\begin{itemize}
+	\item Binary Search
+	\item check if mid and target are in same side
+	\item if not same side assume one side is inf/-inf value let left/right advanced
+\end{itemize}
+
+\subsection{39 combination-sum}
+
+\begin{itemize}
+	\item Backtracking
+\end{itemize}
+
+\subsection{86.partition-list}
+
+\begin{itemize}
+	\item dummy pointers
+	\item two pointers
+\end{itemize}
+
+\subsection{23.merge-k-sorted-lists}
+
+\begin{itemize}
+	\item heap/priority\_queue
+	\item merge two lists iteratively
+\end{itemize}
+
+\subsection{142.linked-list-cycle-ii.cpp}
+
+\begin{itemize}
+	\item two pointers
+\end{itemize}
+
+\subsection{160.intersection-of-two-linked-lists.cpp}
+
+\begin{itemize}
+	\item contact two lists
+	\item make sure two lists have same distance from the end
+\end{itemize}
+
+\subsection{26.remove-duplicates-from-sorted-array}
+
+\begin{itemize}
+	\item fast and slow pointers
+\end{itemize}
+
+\subsection{27.remove-element.cpp}
+
+\begin{itemize}
+	\item fast and slow pointers
+\end{itemize}
+
+\subsection{283.move-zeroes.cpp}
+
+\begin{itemize}
+	\item fast and slow pointers
+	\item snowball
+\end{itemize}
+
+\subsection{5.longest-palindromic-substring}
+
+\begin{itemize}
+	\item dp
+	\item two pointers (expand from center/narrow from both sides)
+\end{itemize}
+
+\subsection{669.trim-a-binary-search-tree.cpp}
+
+\begin{itemize}
+	\item BST (value of left child is smaller, that of right child is larger)
+	\item postorder
+\end{itemize}
+
+\subsection{124.binary-tree-maximum-path-sum.cpp}
+
+\begin{itemize}
+	\item postorder
+	\item discard nodes with negative value
+\end{itemize}
+
+\subsection{46.permutations.cpp}
+
+\begin{itemize}
+	\item Backtracking
+\end{itemize}
+
+\subsection{51.n-queens.cpp}
+
+\begin{itemize}
+	\item Backtracking(current path, options, terminated option)
+\end{itemize}
+
+\subsection{78.subsets.cpp}
+
+\begin{itemize}
+	\item backtracking
+\end{itemize}
+
+\subsection{77.combinations.cpp}
+
+\begin{itemize}
+	\item backtracking
+\end{itemize}
+
+\subsection{90.subsets-ii.cpp}
+
+\begin{itemize}
+	\item backtracking
+\end{itemize}
+
+\subsection{40.combination-sum-ii.cpp}
+
+\begin{itemize}
+	\item backtracking
+\end{itemize}
+
+\subsection{47.permutations-ii.cpp}
+
+\begin{itemize}
+	\item backtracking
+\end{itemize}
+
+\subsection{111.minimum-depth-of-binary-tree.cpp}
+
+\begin{itemize}
+	\item BFS
+\end{itemize}
+
+\subsection{752.open-the-lock.cpp}
+
+\begin{itemize}
+	\item BFS
+\end{itemize}
+
+\subsection{76.minimum-window-substring.cpp}
+
+\begin{itemize}
+	\item sliding windows
+\end{itemize}
+
+\subsection{438.find-all-anagrams-in-a-string.cpp}
+
+\begin{itemize}
+	\item sliding windows
+\end{itemize}
+
+\subsection{337.house-robber-iii.cpp}
+\begin{itemize}
+
+	\item 213.house-robber-ii.cpp
+	\item 198.house-robber.cpp
+	\item DP
+	\item recursive with memorization
+	\item DP table -> optimize table
+\end{itemize}
+
+\subsection{116. Populating Next Right Pointers in Each Node}
+
+\begin{itemize}
+	\item Three children tree traverse
+	\item BFS \(O\left(N\right)\)  space \(O\left(1\right)\)
+\end{itemize}

@@ -59,6 +59,7 @@ In order to get \(\theta\), we use \gls{map}  to maximize the posterior function
 After \(\theta\) is estimated, then  calculating \(\frac{p\giventhat{\vX}{\theta} \cdot p(\theta)}{\int\limits_{\theta} p\giventhat{\vX}{\theta} p(\theta) d\theta}\) to get the posterior distribution.
 We can use the posterior distribution to predict the probability of a new sample \(\vx\).
 
+
 \begin{equation}
 	p \giventhat{x_{\mathtt{new}}}{\vX}  = \int\limits_{\theta} p\giventhat{x_{\mathtt{new}}}{\theta} \cdot p\giventhat{\theta}{\vX} d\theta
 \end{equation}

@@ -10,6 +10,9 @@
 % add figure path for graphicx
 \graphicspath{{figure/}}
 
+% quote \enquote{}
+\usepackage[autostyle]{csquotes}
+
 
 %%%%%%%%%%%%%%%%%%% math %%%%%%%%%%%%%%%%%
 \usepackage{fixmath}
@@ -29,7 +32,7 @@
 
 \makeatletter
 \newcommand{\email}[1]{%
-  \def\@email{#1}%
+	\def\@email{#1}%
 }
 \makeatother
 
@@ -43,6 +46,8 @@
 \maketitle
 \setcounter{tocdepth}{2}
 \setcounter{minitocdepth}{1}
+\setlist[enumerate]{itemsep=0mm}
+\setlist[itemize]{itemsep=0mm}
 
 \begin{multicols}{2}
 	\dominitoc% Initialization
@@ -86,11 +91,12 @@
 \input{chapter/algorithm/algorithm}
 
 \part{Programming}
+\input{chapter/programming/leetcode}
 \input{chapter/programming/cpp}
 \input{chapter/programming/rust}
 
 \part{Research}
-\input{chapter/research/paper_reading}
+\input{chapter/research/paper_writing}
 
 \part{Book Reading}
 \input{chapter/books/dl2note}
@@ -107,4 +113,3 @@
 \printindex
 
 \end{document}
-
