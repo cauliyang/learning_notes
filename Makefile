@@ -28,3 +28,8 @@ commit: precommit
 	git add .
 	aic
 
+sort-bib:
+	bibtex-tidy --omit=abstract,keywords,video,file --curly --numeric --months --tab --align=13 --sort=key --duplicates=key,doi --sort-fields --strip-comments --trailing-commas --encode-urls --remove-empty-fields -m bib.bib
+
+vale:
+	vale sync

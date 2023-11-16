@@ -7,21 +7,102 @@
 \begin{itemize}
 	\item \url{https://github.com/MLNLP-World/Paper-Writing-Tips}
 	\item \url{https://github.com/dspinellis/latex-advice}
-	\item \url{https://www.tldraw.com}
 	\item \url{https://github.com/guanyingc/latex_paper_writing_tips}
+	\item \url{https://github.com/yzy1996/English-Writing}
 	\item \url{https://github.com/guanyingc/cv_rebuttal_template}
 	\item \url{https://www.overleaf.com/gallery/tagged/tikz/page}
 	\item \url{https://color.adobe.com/zh/explore}
 	\item \url{https://github.com/acmi-lab/cmu-10717-the-art-of-the-paper/tree/main/resources}
+	\item \url{https://github.com/daveshap/ChatGPT_Custom_Instructions/blob/main/academic_copy_reviser.md}
+	\item \url{https://github.com/sylvainhalle/textidote?tab=readme-ov-file}
+	\item \url{https://github.com/egeerardyn/awesome-LaTeX}
+	\item \url{https://texfaq.org}
+	\item \url{https://github.com/xinychen/awesome-latex-drawing}
+	\item \url{https://pudding.cool/2022/02/plain}
+	\item \url{https://www.youtube.com/watch?v=VK51E3gHENc&ab_channel=MicrosoftResearch}
+	\item \url{https://www.cs.jhu.edu/~jason/advice/write-the-paper-first.html}
+	\item \url{https://github.com/yzy1996/English-Writing}
 \end{itemize}
 
+\section{Writing Tools}
+
+\begin{table}
+	\caption{Writing Tools}\label{tab:writing_tools}
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{Tool}                     & \textbf{URL}                                       \\
+		\midrule
+		Latex Table Generator             & \url{tablesgenerator.com}                          \\
+		Latex Equation Editor             & \url{https://www.codecogs.com/latex/eqneditor.php} \\
+		Latex Equation and Figure Editor  & \url{https://www.mathcha.io/editor}                \\
+		Equation Image to Latex           & \url{https://mathpix.com/}                         \\
+		Figure Inspiration                & \url{https://echarts.apache.org/examples/}         \\
+		Online Figure Editor              & \url{https://www.tldraw.com/}                      \\
+		Identify Font                     & \url{https://www.fontsquirrel.com/matcherator}     \\
+		Identify Color                    & \url{https://imagecolorpicker.com/}                \\
+		Identify Math Symbol              & \url{https://detexify.kirelabs.org/classify.html}  \\
+		Better Labeling Tool              & \url{https://labelstud.io/}                        \\
+		Fix Wrong Citation                & \url{https://github.com/yuchenlin/rebiber}         \\
+		Have a good name for model        & \url{http://acronymify.com/}                       \\
+		Deadline Reminder                 & \url{https://aideadlin.es/?sub=ML,CV,NLP}          \\
+		Great Paper/Model Info            & \url{https://paperswithcode.com/}                  \\
+		Same Meaning Words                & \url{https://www.thesaurus.com/}                   \\
+		Compare Same Meaning Words        & \url{https://wikidiff.com/neglect/omit}            \\
+		Common Words for Academic Writing & \url{http://www.esoda.org/}                        \\
+		Doi to Bib                        & \url{https://www.doi2bib.org/}                     \\
+		Figure Gallery of Vega            & \url{https://vega.github.io/vega-lite/examples/}   \\
+		Figure Gallery of Graphviz        & \url{https://graphviz.org/gallery/}                \\
+		UML Diagram                       & \url{https://plantuml.com/}                        \\
+		Color Picker                      & \url{https://colorbrewer2.org}                     \\
+		Abstract/Title Generator          & \url{https://x.writefull.com/}                     \\
+		Online BibTeX Formatter           & \url{https://flamingtempura.github.io/bibtex-tidy} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 \section{Writing Tips}
+
+Your draft can describe your motivation, formal problem, model, algorithms, and experiments before you actually build anything.
+(Ideally, it will also explain why you did it this way rather than some other way, and point out gaps that remain for future work.)
+By showing others the draft at this stage, you'll get important feedback before you invest time in the~\enquote{wrong} work.
+
+If you run into trouble while doing the work, then I may have difficulty diagnosing or even understanding the problem you are facing.
+We may waste a whole meeting just getting aligned.
+But if you can show me a precise writeup of what you're doing, then I can be much more helpful.
+In general, meetings are very productive when we have a concrete document in front of us.
+
+
+Of course, there are many kinds of concrete documents.
+You could instead write up the notes from our (usually extensive) discussions as private documents for further discussion.
+Still, writing up in the form of a final paper makes you (1) integrate everything in one place, (2) decide which ideas will be made central for this paper, and (3) focus on the coherence and impact of the end product.
+(Additional discussion and brainstorming can still go into the document—those subsections can be cut or moved to an appendix for the conference paper, but retained for a longer version as a tech report, journal article, or dissertation.)\footnote{\url{https://www.cs.jhu.edu/~jason/advice/write-the-paper-first.html}}
+
+\paragraph{What needs to be done?}
+Assuming the idea is indeed a good one, then writing a draft makes you sharpen the message of the paper.
+Then you can figure out what work needs to be done to support exactly that message.
+
+\begin{itemize}
+	\item Your introduction will make some claims. Often you will realize that some interesting additional experiment would really test those claims.
+	\item Writing the literature review will help you design your experiments. It may influence what datasets you use, what comparisons you do, and what you are trying to prove you can do that other people can't.
+	      However, don't write the lit review first. Write out your own ideas before comparing them with the literature. This increases the chance that you'll find new angles on the problem.
+	\item Writing the experimental section is possible even before you've done the experiments. Explain the full experimental design. Make empty result tables with row and column headers and explanatory captions. Make empty graphs with axes and captions. The actual results will be missing, but it will be clear what work is necessary.
+	      If you are having trouble switching your brain from experiments to writing, just write up your current experiments first. Although writing an intro will also help, so you can explain why you are doing the experiments.
+\end{itemize}
+
+Honest writing may lead you to realize that proving your point requires more work than you'd thought (which is why you'd better write early).
+
+
+\paragraph{How to give a wonderful talk?}
+\begin{itemize}
+	\item What is the question?
+	\item Why is it interesting?
+	\item How do you propose to answer it?
+\end{itemize}
 
 
 \begin{itemize}
 	\item e.g. means \enquote{for example}.
-	\item i.e. means \enquote{that is}.
+	\item i.e.  \ means \enquote{that is}.
 	\item et al. means \enquote{and others of the same kind}.
 	\item etc. means \enquote{and others}, do not specify people.
 \end{itemize}
@@ -29,6 +110,7 @@
 \paragraph{Avoid extreme meaning words}
 
 \begin{table}[ht]
+	\caption{Alternative Terms for Common Words}\label{tab:alternative_terms}
 	\centering
 	\begin{tabular}{@{}ll@{}}
 		\toprule
@@ -51,8 +133,6 @@
 		really           & very, extremely, highly                  \\
 		\bottomrule
 	\end{tabular}
-	\caption{Alternative Terms for Common Words}
-	\label{tab:alternative_terms}
 \end{table}
 
 
@@ -75,6 +155,13 @@
 	\item Many economists think of themselves as primarily experts in technical methods: Econometrics, economic theory, data expertise.
 	\item This “white coat” mentality—that we are mainly scientists who then do a write-up of our results—is deeply wrong.
 	\item Writing is an essential part of the research process, not a last-minute thing to be rushed.
+	\item Do not wait to write
+	\item Identify your key idea explicitly
+	\item Tell a story paper structure
+	\item Nail your contributions to the mast  introduction
+	\item Related work
+	\item Put your readers first the main body
+	\item Listen to your readers
 \end{enumerate}
 
 \paragraph{Latex Writing Tips}
@@ -85,13 +172,14 @@
 	\item use \verb|\figurename~\ref{fig}| to reference figure.
 	\item \verb|Eq.~\eqref{eq1}|
 	\item comments from different people can be distinguished by different colors. \verb|\newcommand{\yl}[1]{{\color{blue}{[(YL): #1]}}}|
+	\item use \verb|\newcommand{\method}{ABC\xspace}| to define model name or method
+	\item mathematic notation \url{https://www.deeplearningbook.org/contents/notation.html}
 \end{itemize}
 
-\section{PhD Theses TIPs}
 
+\section{PhD Theses Tips}
 
-The PhD Thesis Tips from \url{https://www.karlwhelan.com/Teaching/PhD/phd-writing-talk.pdf}.
-
+\paragraph{The PhD Thesis Tips from \url{https://www.karlwhelan.com/Teaching/PhD/phd-writing-talk.pdf}}
 What makes a good thesis? Forget about objectivity—beauty is in the eye of the beholder.
 A good thesis is one that readers think is good.
 So, you need to explain well what you are doing to somebody else.
@@ -143,6 +231,7 @@ Grammar. There are rules about how to use commas, colons, semi-colons, full stop
 \section{Abstract}
 
 
+
 \section{Introduction}
 
 \begin{enumerate}
@@ -176,9 +265,7 @@ Grammar. There are rules about how to use commas, colons, semi-colons, full stop
 \section{Method}
 
 
-
 \section{Result}
-
 
 
 

@@ -18,7 +18,6 @@ Combination is an arrangement of objects in which the order is not important.
 	C\left(n,r\right) = \frac{P\left(n,r\right)}{r!} = \frac{n!}{r!\left(n-r\right)!}
 \]
 
-
 in which \(0 \le r \le n\).
 
 
@@ -69,13 +68,13 @@ We can use the posterior distribution to predict the probability of a new sample
 Gaussian distribution is also called normal distribution.
 
 \begin{equation}
-	\theta = (\mu, \sigma^2), \quad \mu = \frac{1}{N} \sum_{i=1}^{N} x_i, \quad \sigma^2 = \frac{1}{N} \sum_{i=1}^{N} (x_i - \mu)^2
+	\boldsymbol{\theta} = (\mu, \sigma^2), \quad \mu = \frac{1}{N} \sum_{i=1}^{N} x_i, \quad \sigma^2 = \frac{1}{N} \sum_{i=1}^{N} (x_i - \mu)^2
 \end{equation}
 
 For \gls{mle},
 
 \begin{equation}
-	\theta = (\mu, \Sigma) = (\mu, \sigma^2), \quad \theta_{\mathtt{MLE}} = \argmax_{\theta} \log p\giventhat{\vX}{\theta} = \argmax_{\theta} \sum_{i=1}^{N} \log p\giventhat{\vx_i}{\theta}
+	\boldsymbol{\theta} = (\mu, \Sigma) = (\mu, \sigma^2), \quad \theta_{\mathtt{MLE}} = \argmax_{\theta} \log p\giventhat{\vX}{\theta} = \argmax_{\theta} \sum_{i=1}^{N} \log p\giventhat{\vx_i}{\theta}
 \end{equation}
 
 

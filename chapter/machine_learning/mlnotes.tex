@@ -1,16 +1,14 @@
 \chapter{Notes} % (fold)
 \label{chap:Notes}
 
-\section{Complexity of matrix multiply} % (fold)
-\label{sec:Complexity of matrix multiply}
+\section{Complexity of matrix multiply}\label{sec:Complexity of matrix multiply}
 
-Assume $A$ is $m\times n$ and $B$ is $n\times p$.
+Assume $\mathbf{A}$ is $m\times n$ and $\mathbf{B}$ is $n\times p$.
 The naive algorithm takes $O\left(mnp\right)$ time.
 
 
 
-\section{Representation of matrix} % (fold)
-\label{sec:Representation of matrix}
+\section{Representation of matrix}\label{sec:Representation of matrix}
 
 row major, col major, stride
 
@@ -21,14 +19,13 @@ row major, col major, stride
 In which  \(n_h\)  means height of input, \(k_h\) means height of filter, \(p_h\) means padding of height, \(s_h\) means stride of height. So as \(n_w\), \(k_w\), \(p_w\), \(s_w\).
 
 
-\section{Training skills} % (fold)
-\label{sec:Training skills}
+\section{Training skills}\label{sec:Training skills}
 
 
 \paragraph{Batch normalization}
 
 \[
-    \mathrm{BN}(\bm{x})  = \gamma  \odot \frac{\bm{x} - \hat{\bm \mu}_\mathcal{B}}{\hat{\bm \sigma}_\mathcal{B}} + \beta
+	\textrm{BN}(\bm{x})  = \gamma  \odot \frac{\bm{x} - \hat{\bm \mu}_\mathcal{B}}{\hat{\bm \sigma}_\mathcal{B}} + \beta
 \]
 
 in which,
