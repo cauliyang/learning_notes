@@ -11,6 +11,7 @@
 
 % quote \enquote{}
 \usepackage[autostyle]{csquotes}
+\usepackage{import}
 
 
 %%%%%%%%%%%%%%%%%%% math %%%%%%%%%%%%%%%%%
@@ -79,26 +80,28 @@
 % \printunsrtglossary % main entry
 
 %%%%%%%%%%%%%%%Content%%%%%%%%%%%%%%%
-% \mainmatter % separat the number of toc and mainmatter
+\mainmatter % separate the number of toc and mainmatter
 \input{chapter/preface}
 
 \part{Machine Learning}
-\input{chapter/machine_learning/statistic}
-\input{chapter/machine_learning/mlnotes.tex}
+\import{chapter/machine_learning/}{statistic}
+\import{chapter/machine_learning/}{mlnotes}
 
 \part{Algorithm and Data Structure}
-\input{chapter/algorithm/algorithm}
+\import{chapter/algorithm/}{algorithm}
 
 \part{Programming}
-\input{chapter/programming/leetcode}
-\input{chapter/programming/cpp}
-\input{chapter/programming/rust}
+
+\import{chapter/programming/}{leetcode}
+\import{chapter/programming/}{cpp}
+\import{chapter/programming/}{rust}
 
 \part{Research}
-\input{chapter/research/paper_writing}
+\import{chapter/research/}{paper_writing}
 
 \part{Book Reading}
-\input{chapter/books/dl2note}
+\import{chapter/books/}{dl2note}
+\import{chapter/books/}{generative_deep_learning}
 
 \begin{appendices}
 	\input{chapter/appendix_formula}

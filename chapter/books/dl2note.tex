@@ -13,23 +13,23 @@ To minimize the sum of squared differences, we take the derivative of the functi
 The function to minimize is:
 
 \[
-f(b) = \sum_{i=1}^{n} (x_i - b)^2
+	f(b) = \sum_{i=1}^{n} (x_i - b)^2
 \]
 
 Taking the derivative with respect to (b) gives:
 
 $$
-f’(b) = \sum_{i=1}^{n} -2(x_i - b)
+	f’(b) = \sum_{i=1}^{n} -2(x_i - b)
 $$
 
 Setting this equal to zero and solving for (b) gives:
 
 $$
-0 = \sum_{i=1}^{n} -2(x_i - b)
+	0 = \sum_{i=1}^{n} -2(x_i - b)
 $$
 Solving for (b) gives:
 $$
-b = \frac{1}{n} \sum_{i=1}^{n} x_i
+	b = \frac{1}{n} \sum_{i=1}^{n} x_i
 $$
 
 So the value of (b) that minimizes the sum of squared differences is the mean of the \(x_i\).
@@ -50,7 +50,7 @@ An affine function is a function composed of a linear transformation and a trans
 We can show that this affine function is equivalent to a linear function on the augmented vector \((\mathbf{x}, 1)\) by considering a new weight vector \(\mathbf{w}' = (\mathbf{w}, b)\) and an augmented input vector \(\mathbf{x}' = (\mathbf{x}, 1)\). Then the affine function can be written as a linear function:
 
 $$
-f(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} + b = \mathbf{x}’^\top \mathbf{w}’
+	f(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} + b = \mathbf{x}’^\top \mathbf{w}’
 $$
 
 Here’s the proof:
@@ -220,17 +220,17 @@ Hint: pseudorandom permutation generators 75 allow you to design a reshuffle wit
 
 If we cannot hold all the data in memory:
 
- \textbf{Performance Impact}: Reading data directly from disk is much slower than reading from memory. If the training algorithm frequently accesses the disk, it can significantly slow down the training process.
+\textbf{Performance Impact}: Reading data directly from disk is much slower than reading from memory. If the training algorithm frequently accesses the disk, it can significantly slow down the training process.
 
- \textbf{Out-of-Core Processing}: You'll need to use "out-of-core" or "external memory" algorithms, which are designed to process data that is too large to fit into a computer's main memory.
- These algorithms break the data into smaller chunks that can fit into memory, process each chunk, and then combine the results.
+\textbf{Out-of-Core Processing}: You'll need to use "out-of-core" or "external memory" algorithms, which are designed to process data that is too large to fit into a computer's main memory.
+These algorithms break the data into smaller chunks that can fit into memory, process each chunk, and then combine the results.
 
 \textbf{Streaming:} Data can be streamed from the disk in mini-batches.
 Only one mini-batch is loaded into memory at a time, and after processing it, the next mini-batch is loaded.
 This is common in deep learning when dealing with large datasets.
 
- \textbf{Distributed Computing}: Another approach is to distribute the dataset across multiple machines in a cluster.
- Each machine processes a subset of the data. Frameworks like TensorFlow and PyTorch have support for distributed training.
+\textbf{Distributed Computing}: Another approach is to distribute the dataset across multiple machines in a cluster.
+Each machine processes a subset of the data. Frameworks like TensorFlow and PyTorch have support for distributed training.
 
 2. How would you shuffle the data if it is held on disk?
 
@@ -240,9 +240,9 @@ Shuffling large datasets on disk without too many random reads or writes can be 
 The beauty of pseudorandom permutation generators is that they can generate the nth element of the sequence without generating the first n-1 elements, allowing for efficient random access.
 
 2. Sequential Reads and Writes:
-   - Read the data from the disk sequentially in large chunks (to benefit from sequential read speeds).
-   - For each item in the chunk, use the pseudorandom permutation generator to determine its new location in the shuffled dataset.
-   - Write the shuffled data back to the disk sequentially in large chunks.
+- Read the data from the disk sequentially in large chunks (to benefit from sequential read speeds).
+- For each item in the chunk, use the pseudorandom permutation generator to determine its new location in the shuffled dataset.
+- Write the shuffled data back to the disk sequentially in large chunks.
 
 3. In-Place Shuffling: If you have some memory available (but not enough to hold the entire dataset), you can load chunks of data into memory, shuffle them using the pseudorandom permutation, and then write them back to disk.
 This reduces the number of disk writes.
@@ -330,24 +330,24 @@ So, if you're already using one of these frameworks, you likely don't need to ad
 The learning rate and the number of epochs are two critical hyperparameters in training neural networks and other machine learning models. Their values can significantly impact the convergence and performance of the model. Let's discuss the effects of changing each:
 
 1. Learning Rate (\( \eta \)):
-   - Too High: If the learning rate is set too high, the model might overshoot the minima in the loss landscape, leading to divergence. The loss might oscillate or even explode.
-   - Too Low: If the learning rate is too low, the model will converge very slowly. It might get stuck in local minima or plateaus in the loss landscape.
-   - Adaptive: Many modern optimizers (like Adam, RMSprop) adjust the learning rate dynamically based on recent gradients, which can help in finding a good balance.
+- Too High: If the learning rate is set too high, the model might overshoot the minima in the loss landscape, leading to divergence. The loss might oscillate or even explode.
+- Too Low: If the learning rate is too low, the model will converge very slowly. It might get stuck in local minima or plateaus in the loss landscape.
+- Adaptive: Many modern optimizers (like Adam, RMSprop) adjust the learning rate dynamically based on recent gradients, which can help in finding a good balance.
 
 2. Number of Epochs:
-   - Too Few: If the number of epochs is too low, the model might underfit the data, as it hasn't seen the data enough times to learn the underlying patterns.
-   - Too Many: If the number of epochs is too high, the model might overfit the data, especially if there isn't an early stopping mechanism or regularization in place. Overfitting means the model performs well on the training data but poorly on unseen data.
+- Too Few: If the number of epochs is too low, the model might underfit the data, as it hasn't seen the data enough times to learn the underlying patterns.
+- Too Many: If the number of epochs is too high, the model might overfit the data, especially if there isn't an early stopping mechanism or regularization in place. Overfitting means the model performs well on the training data but poorly on unseen data.
 
 Does it keep on improving?
 
 - Not necessarily. As training progresses:
-  - The loss typically decreases and the model's performance on the training set improves.
-  - However, after a certain point, the model might start to overfit, and its performance on a validation set might start to degrade.
-  - The optimal number of epochs is often where the performance on the validation set is maximized.
+- The loss typically decreases and the model's performance on the training set improves.
+- However, after a certain point, the model might start to overfit, and its performance on a validation set might start to degrade.
+- The optimal number of epochs is often where the performance on the validation set is maximized.
 
 - The learning rate plays a crucial role in this:
-  - A good learning rate can help the model converge to a good solution faster.
-  - Learning rate schedules or decay can be beneficial. Starting with a larger learning rate (to progress quickly) and reducing it over time (to fine-tune) can be effective.
+- A good learning rate can help the model converge to a good solution faster.
+- Learning rate schedules or decay can be beneficial. Starting with a larger learning rate (to progress quickly) and reducing it over time (to fine-tune) can be effective.
 
 In summary, there's a balance to strike.
 It's essential to monitor both training and validation metrics during training to determine the best values for the learning rate and the number of epochs.
@@ -468,45 +468,45 @@ Similarly, the softmin for \( n \) numbers is:
 \paragraph{Deep learning uses many different number formats, including FP64 double precision (used extremely rarely), FP32 single precision, BFLOAT16 (good for compressed representations), FP16 (very unstable), TF32 (a new format from NVIDIA), and INT8. Compute the smallest and largest argument of the exponential function for which the result does not lead to numerical underflow or overflow}
 
 \begin{table}[h!]
-\centering
-\begin{tabular}{lrrrrrrr}
-\toprule
-format & format\_min & format\_max & exp\_min & exp\_max & test\_min & exp(max-1) & exp(max+1) \\
-\midrule
-torch.float64 & -1.80e+308 & 1.80e+308 & -1.80e+308 & 7.10e+02 & 0.00e+00 & 6.61e+307 & inf \\
-torch.float32 & -3.40e+38 & 3.40e+38 & -3.40e+38 & 8.87e+01 & 0.00e+00 & 1.25e+38 & inf \\
-torch.bfloat16 & -3.39e+38 & 3.39e+38 & -3.39e+38 & 8.85e+01 & 0.00e+00 & 1.00e+38 & inf \\
-torch.float16 & -6.55e+04 & 6.55e+04 & -6.55e+04 & 1.11e+01 & 0.00e+00 & 2.41e+04 & inf \\
-torch.int8 & -1.28e+02 & 1.27e+02 & -1.28e+02 & 4.84e+00 & 0.00e+00 & 4.67e+01 & 8.90e+01 \\
-\bottomrule
-\end{tabular}
+	\centering
+	\begin{tabular}{lrrrrrrr}
+		\toprule
+		format         & format\_min & format\_max & exp\_min   & exp\_max & test\_min & exp(max-1) & exp(max+1) \\
+		\midrule
+		torch.float64  & -1.80e+308  & 1.80e+308   & -1.80e+308 & 7.10e+02 & 0.00e+00  & 6.61e+307  & inf        \\
+		torch.float32  & -3.40e+38   & 3.40e+38    & -3.40e+38  & 8.87e+01 & 0.00e+00  & 1.25e+38   & inf        \\
+		torch.bfloat16 & -3.39e+38   & 3.39e+38    & -3.39e+38  & 8.85e+01 & 0.00e+00  & 1.00e+38   & inf        \\
+		torch.float16  & -6.55e+04   & 6.55e+04    & -6.55e+04  & 1.11e+01 & 0.00e+00  & 2.41e+04   & inf        \\
+		torch.int8     & -1.28e+02   & 1.27e+02    & -1.28e+02  & 4.84e+00 & 0.00e+00  & 4.67e+01   & 8.90e+01   \\
+		\bottomrule
+	\end{tabular}
 \end{table}
 
 1. FP64 (Double Precision):
-    - Smallest positive normalized number \(2^{-1022}\)
-    - Largest finite representable number \( (2-2^{-52}) \times 2^{1023} \)
-    - For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-1022 \log(2), 1023 \log(2)]\).
+- Smallest positive normalized number \(2^{-1022}\)
+- Largest finite representable number \( (2-2^{-52}) \times 2^{1023} \)
+- For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-1022 \log(2), 1023 \log(2)]\).
 
 2. FP32 (Single Precision):
-   - Smallest positive normalized number: \(2^{-126}\)
-   - Largest finite representable number: \( (2-2^{-23}) \times 2^{127} \)
-   - For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-126 \log(2), 127 \log(2)]\).
+- Smallest positive normalized number: \(2^{-126}\)
+- Largest finite representable number: \( (2-2^{-23}) \times 2^{127} \)
+- For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-126 \log(2), 127 \log(2)]\).
 
 3. BFLOAT16:
-   - This format has the same exponent bits as FP32 but fewer precision bits.
-   - The range for the exponential function would be similar to FP32.
+- This format has the same exponent bits as FP32 but fewer precision bits.
+- The range for the exponential function would be similar to FP32.
 
 4. FP16:
-   - Smallest positive normalized number: \(2^{-14}\)
-   - Largest finite representable number: \( (2-2^{-10}) \times 2^{15} \)
-   - For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-14 \log(2), 15 \log(2)]\).
+- Smallest positive normalized number: \(2^{-14}\)
+- Largest finite representable number: \( (2-2^{-10}) \times 2^{15} \)
+- For the exponential function, the range of \(x\) for which \(e^x\) does not overflow would be approximately \([-14 \log(2), 15 \log(2)]\).
 
 5. TF32:
-   - This is a new format introduced by NVIDIA, and it has 10 bits for the exponent and 19 bits for the fraction.
-   - The range would be somewhere between FP32 and FP16.
+- This is a new format introduced by NVIDIA, and it has 10 bits for the exponent and 19 bits for the fraction.
+- The range would be somewhere between FP32 and FP16.
 
 6. INT8:
-   - This is an integer format, so it doesn't directly apply to the exponential function in the same way as the floating-point formats. However, if used in quantized neural networks, the range would be \([-128, 127]\).
+- This is an integer format, so it doesn't directly apply to the exponential function in the same way as the floating-point formats. However, if used in quantized neural networks, the range would be \([-128, 127]\).
 
 For the exact ranges, especially for the newer formats like TF32, one would need to refer to the official documentation or specifications provided by the manufacturers.
 
@@ -537,15 +537,15 @@ When an object is at the boundary of an image, and we apply convolutions, severa
 1. Loss of Information: The primary issue is that for pixels on the boundary, there aren't enough neighboring pixels to apply the convolution kernel fully. This means that these boundary pixels might not be processed adequately, leading to potential loss of information about objects at the image boundary.
 
 2. Padding: To address the boundary issue, one common approach is to add padding around the image. Padding involves adding extra pixels around the boundary of the image. There are different types of padding:
-   - Zero Padding: Adding pixels with a value of zero.
-   - Reflect Padding: The boundary pixels are reflected. For instance, if the last row of an image is \([a, b, c]\), it becomes \([a, b, c, c, b, a]\) after reflect padding.
-   - Replicate Padding: The boundary pixels are replicated. Using the previous example, it becomes \([a, b, c, c, c, c]\).
+- Zero Padding: Adding pixels with a value of zero.
+- Reflect Padding: The boundary pixels are reflected. For instance, if the last row of an image is \([a, b, c]\), it becomes \([a, b, c, c, b, a]\) after reflect padding.
+- Replicate Padding: The boundary pixels are replicated. Using the previous example, it becomes \([a, b, c, c, c, c]\).
 
-   Padding ensures that every pixel, including those on the boundary, has a full neighborhood of pixels to apply the convolution kernel.
+Padding ensures that every pixel, including those on the boundary, has a full neighborhood of pixels to apply the convolution kernel.
 
 3. Valid vs. Same Convolutions:
-   - Valid Convolution: No padding is used. The resulting feature map after convolution is smaller than the input image because the kernel can only be applied to positions where it fits entirely within the image boundaries.
-   - Same Convolution: Padding is added such that the output feature map has the same spatial dimensions as the input image.
+- Valid Convolution: No padding is used. The resulting feature map after convolution is smaller than the input image because the kernel can only be applied to positions where it fits entirely within the image boundaries.
+- Same Convolution: Padding is added such that the output feature map has the same spatial dimensions as the input image.
 
 4. Edge Effects: Even with padding, objects at the boundary might be affected differently than objects in the center of the image. This is because the artificial values introduced by padding might not represent the actual image content. This can lead to edge artifacts in the output feature map.
 
@@ -596,17 +596,17 @@ Cross-correlation can be represented as a matrix multiplication by converting th
 This process is often referred to as ``toeplitzization'' or ``im2col'' (image to column) transformation. Here's how you can achieve this:
 
 1. Flatten the Kernel:
-    - First, you reshape the kernel into a column vector.
-    - If the kernel is of size \( k \times k \), the resulting vector will be of size \( k^2 \times 1 \).
+- First, you reshape the kernel into a column vector.
+- If the kernel is of size \( k \times k \), the resulting vector will be of size \( k^2 \times 1 \).
 
 2. Toeplitz Matrix for Input:
-    - For each position in the output, extract a \( k \times k \) patch from the input, and flatten it into a row vector.
-    - Stack these row vectors on top of each other to form a matrix. This matrix has a special structure called a Toeplitz matrix.
-    - If the input is of size \( n \times n \) and the kernel is \( k \times k \), then the resulting matrix will be of size \( \left(n-k+1\right)^2   \times k^2 \).
+- For each position in the output, extract a \( k \times k \) patch from the input, and flatten it into a row vector.
+- Stack these row vectors on top of each other to form a matrix. This matrix has a special structure called a Toeplitz matrix.
+- If the input is of size \( n \times n \) and the kernel is \( k \times k \), then the resulting matrix will be of size \( \left(n-k+1\right)^2   \times k^2 \).
 
 3. Matrix Multiplication:
-    - Multiply the Toeplitz matrix (from step 2) with the flattened kernel (from step 1). The result will be a column vector representing the flattened output of the cross-correlation operation.
-    - Reshape this column vector back into a 2D matrix to get the final output.
+- Multiply the Toeplitz matrix (from step 2) with the flattened kernel (from step 1). The result will be a column vector representing the flattened output of the cross-correlation operation.
+- Reshape this column vector back into a 2D matrix to get the final output.
 
 Mathematically, if \( M \) is the Toeplitz matrix derived from the input and \( K \) is the column vector derived from the kernel, then the output \( O \) is given by:
 
