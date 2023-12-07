@@ -54,16 +54,8 @@ jobs:
           latexmk_shell_escape: true
           args: "-output-directory=."
 
-      - name: Commit files
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git status
-          git add .
-          git commit -m "update pdf" -a
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          name: PDF
+          path: scinote.pdf
