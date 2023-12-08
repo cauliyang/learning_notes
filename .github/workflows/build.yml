@@ -49,6 +49,7 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: "scinote.tex"
+          extra_system_packages: "inkscape"
           glob_root_file: true
           latexmk_use_lualatex: true
           latexmk_shell_escape: true

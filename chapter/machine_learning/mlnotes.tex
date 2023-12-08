@@ -57,7 +57,7 @@ Sliding the kernel window with stride of 1 for \( n_{w} \) times in each row and
 Each intermediate result is a \( \left(n_{h} + k_{h} -1\right) \times  \left(n_{w} + k_{w} - 1\right) \) tensor that are initialized as zeros.
 To compute each intermediate tensor, each element in the input tensor is multiplied by the kernel so that the resulting tensor \( k_{h} \times k_{w} \) replaces a portion in each intermediate tensor.
 Note that the position of the replaced portion in each intermediate tensor corresponds to the position of the element in the input tensor used for the computation.
-In the end, all the intermediate results are summed over to produce the output~\cite{zhang2023dive}.
+In the end, all the intermediate results are summed over to produce the output~\cite[Chapter~14.10]{zhang2023dive}.
 
 
 \begin{figure}
@@ -65,7 +65,7 @@ In the end, all the intermediate results are summed over to produce the output~\
 	\begin{center}
 		\includesvg[width=0.95\textwidth]{figures/trans_conv}
 	\end{center}
-	\caption{Transposed Convolution}\label{fig:trans_conv}
+	\caption{Transposed Convolution~\cite[Chapter~14.10]{zhang2023dive}}\label{fig:trans_conv}
 \end{figure}
 
 
