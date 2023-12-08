@@ -1,7 +1,6 @@
 \chapter{Dive into Deep Learning}\label{chp:dive-into-deep-learning}
 
-\section{Linear Neural Networks} % (fold)
-\label{sec:Linear Neural Networks}
+\section{Linear Neural Networks}\label{sec:Linear Neural Networks}
 
 \subsection{Exercise 3.1.6}
 
@@ -13,24 +12,24 @@ To minimize the sum of squared differences, we take the derivative of the functi
 The function to minimize is:
 
 \[
-	f(b) = \sum_{i=1}^{n} (x_i - b)^2
+	f(b) = \sum_{i=1}^{n} \left(x_i - b\right)^2
 \]
 
 Taking the derivative with respect to (b) gives:
 
-$$
-	f’(b) = \sum_{i=1}^{n} -2(x_i - b)
-$$
+\[
+	f'(b) = \sum_{i=1}^{n} -2\left(x_i - b\right)
+\]
 
 Setting this equal to zero and solving for (b) gives:
 
-$$
+\[
 	0 = \sum_{i=1}^{n} -2(x_i - b)
-$$
+\]
 Solving for (b) gives:
-$$
+\[
 	b = \frac{1}{n} \sum_{i=1}^{n} x_i
-$$
+\]
 
 So the value of (b) that minimizes the sum of squared differences is the mean of the \(x_i\).
 
@@ -45,21 +44,23 @@ Unlike the mean, the median is not sensitive to extreme values, so it is a more 
 \paragraph{Exercise 2:}
 
 An affine function is a function composed of a linear transformation and a translation.
-`In` the context of machine learning, an affine function often takes the form \(f(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} + b)\), where \(\mathbf{x}\) is an input vector, \(\mathbf{w}\) is a weight vector, and (b) is a bias term.
+In the context of machine learning, an affine function often takes the form \(f(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} + b)\), where \(\mathbf{x}\) is an input vector, \(\mathbf{w}\) is a weight vector, and (b) is a bias term.
 
-We can show that this affine function is equivalent to a linear function on the augmented vector \((\mathbf{x}, 1)\) by considering a new weight vector \(\mathbf{w}' = (\mathbf{w}, b)\) and an augmented input vector \(\mathbf{x}' = (\mathbf{x}, 1)\). Then the affine function can be written as a linear function:
+We can show that this affine function is equivalent to a linear function on the augmented vector \((\mathbf{x}, 1)\) by considering a new weight vector \(\mathbf{w}' = (\mathbf{w}, b)\) and an augmented input vector \(\mathbf{x}' = (\mathbf{x}, 1)\).
+Then the affine function can be written as a linear function:
 
-$$
-	f(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} + b = \mathbf{x}’^\top \mathbf{w}’
-$$
+\[
+	f(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} + b = \mathbf{x}'^\top \mathbf{w}'
+\]
+
 
 Here’s the proof:
 
 The original affine function is \(f(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} + b\).
 
-We define \(\mathbf{x}’ = (\mathbf{x}, 1)) and (\mathbf{w}’ = (\mathbf{w}, b)\).
+We define \(\mathbf{x}' = (\mathbf{x}, 1)) and (\mathbf{w}' = (\mathbf{w}, b)\).
 
-The dot product \(\mathbf{x}’^\top \mathbf{w}’) is (\mathbf{x}^\top \mathbf{w} + 1 \cdot b\), which is exactly the original affine function.
+The dot product \(\mathbf{x}'^\top \mathbf{w}') is (\mathbf{x}^\top \mathbf{w} + 1 \cdot b\), which is exactly the original affine function.
 
 Therefore, the affine function \(\mathbf{x}^\top \mathbf{w} + b\) is equivalent to the linear function \(\mathbf{x}'^\top \mathbf{w}'\) on the augmented vector \((\mathbf{x}, 1)\).
 This equivalence is often used in machine learning to simplify the notation and the implementation of algorithms.
@@ -181,18 +182,18 @@ The expected value of a Poisson-distributed random variable is indeed \(\lambda\
 
 The expected value (E[k]) of a random variable (k) distributed according to a Poisson distribution is given by:
 
-$$E[k] = \sum_{k=0}^{\infty} k \cdot p(k \mid \lambda) = \sum_{k=0}^{\infty} k \cdot \frac{\lambda^k e^{-\lambda}}{k!}$$
+\[E[k] = \sum_{k=0}^{\infty} k \cdot p(k \mid \lambda) = \sum_{k=0}^{\infty} k \cdot \frac{\lambda^k e^{-\lambda}}{k!}\]
 
 By the properties of the Poisson distribution, this sum equals \(\lambda\).
 
 The loss function associated with the Poisson distribution is typically the negative log-likelihood. Given observed counts \(y_1, y_2, \ldots, y_n\) and predicted rates \(\lambda_1, \lambda_2, \ldots, \lambda_n\), the negative log-likelihood is:
 
-$$L(\lambda, y) = \sum_{i=1}^{n} (\lambda_i - y_i \log \lambda_i)$$
+\[L(\lambda, y) = \sum_{i=1}^{n} \left(\lambda_i - y_i \log \lambda_i\right)\]
 
 If we want to estimate \(\log \lambda\) instead of \(\lambda\), we can modify the loss function accordingly.
 One possible choice is to use the squared difference between the logarithm of the predicted rate and the logarithm of the observed count:
 
-$$L(\log \lambda, y) = \sum_{i=1}^{n} (\log \lambda_i - \log y_i)^2$$
+\[L\left(\log \lambda, y\right) = \sum_{i=1}^{n} \left(\log \lambda_i - \log y_i\right)^2\]
 
 This loss function penalizes relative errors in the prediction of the rate, rather than absolute errors. It can be more appropriate when the counts vary over a wide range, as it gives equal weight to proportional errors in the prediction of small and large counts.
 
@@ -320,7 +321,7 @@ If you change the loss from an aggregate to an average, the gradient \( \nabla L
 
 In other words, if your original learning rate was \( \eta_{\text{original}} \) when using aggregate loss, and you switch to using average loss, your new learning rate should be:
 
-\[ \eta_{\text{new}} = \eta_{\text{original}} \times \text{batch size} \]
+\[ \eta_{\text{new}} = \eta_{\textrm{original}} \times \textrm{batch size} \]
 
 However, in practice, many deep learning frameworks, including TensorFlow and PyTorch, compute the average loss over a minibatch by default.
 So, if you're already using one of these frameworks, you likely don't need to adjust the learning rate when switching between aggregate and average loss, unless you were explicitly scaling the loss by the batch size yourself.
@@ -375,26 +376,26 @@ First, the derivative of \( \hat{y}_i \) with respect to \( o_k \) is:
 
 \[ \frac{\partial \hat{y}_i}{\partial o_k} = \hat{y}_i (\delta_{ik} - \hat{y}_k) \]
 
-Where \( \delta_{ik} \) is the Kronecker delta (it's 1 when \( i = k \) and 0 otherwise).
+Where \( \delta_{ik} \) is the Kronecker delta (it's when \( i = k \) and 0 otherwise).
 Using the above, the second derivative is:
 
 \[ \frac{\partial^2 l}{\partial o_i \partial o_k} = -\sum_j y_j \frac{\partial^2 \log(\hat{y}_j)}{\partial o_i \partial o_k} \]
 
 \[ = -\sum_j y_j \frac{\partial}{\partial o_i} \left( \frac{\hat{y}_j (\delta_{jk} - \hat{y}_k)}{\hat{y}_j} \right) \]
 
-\[ = -\sum_j y_j (\delta_{jk} - \hat{y}_k) \frac{\partial \hat{y}_j}{\partial o_i} \]
+\[ = -\sum_j y_j \left(\delta_{jk} - \hat{y}_k\right) \frac{\partial \hat{y}_j}{\partial o_i} \]
 
-\[ = -\sum_j y_j (\delta_{jk} - \hat{y}_k) \hat{y}_j (\delta_{ji} - \hat{y}_i) \]
+\[ = -\sum_j y_j \left(\delta_{jk} - \hat{y}_k\right) \hat{y}_j \left(\delta_{ji} - \hat{y}_i\right) \]
 
 2. Variance of the Distribution Given by Softmax
 
-The variance \( \text{Var}[X] \) of a discrete random variable \( X \) with possible outcomes \( x_1, x_2, \ldots \) and probabilities \( p_1, p_2, \ldots \) is:
+The variance \( \textrm{Var}[X] \) of a discrete random variable \( X \) with possible outcomes \( x_1, x_2, \ldots \) and probabilities \( p_1, p_2, \ldots \) is:
 
-\[ \text{Var}[X] = \sum_i p_i (x_i - \mathbb{E}[X])^2 \]
+\[ \textrm{Var}[X] = \sum_i p_i \left(x_i - \mathbb{E}[X]\right)^2 \]
 
 For the softmax distribution, \( X \) can take on values corresponding to the logits \( o \) with probabilities \( \hat{y} \). Thus, the variance becomes:
 
-\[ \text{Var}[X] = \sum_i \hat{y}_i (o_i - \mathbb{E}[X])^2 \]
+\[ \textrm{Var}[X] = \sum_i \hat{y}_i \left(o_i - \mathbb{E}[X]\right)^2 \]
 
 Where \( \mathbb{E}[X] = \sum_i \hat{y}_i o_i \).
 
@@ -407,10 +408,10 @@ The detailed algebra can be quite involved, but the key insight is understanding
 
 \paragraph{5. Softmax gets its name from the following mapping: \(RealSoftMax(a, b) = log(exp(a) + exp(b))\)}
 
-1. Prove that \( \text{RealSoftMax}(a, b) > \max(a, b) \):
+1. Prove that \( \textrm{RealSoftMax}(a, b) > \max(a, b) \):
 
 Given:
-\[ \text{RealSoftMax}(a, b) = \log(\exp(a) + \exp(b)) \]
+\[ \textrm{RealSoftMax}(a, b) = \log(\exp(a) + \exp(b)) \]
 
 Now, since \( \exp(a) \) and \( \exp(b) \) are both positive, we have:
 \[ \exp(a) + \exp(b) > \exp(a) \]
@@ -425,43 +426,44 @@ Thus, \( \text{RealSoftMax}(a, b) > \max(a, b) \).
 2. How small can you make the difference between both functions?
 
 Without loss of generality, let's set \( b = 0 \) and \( a \geq b \). Then:
-\[ \text{RealSoftMax}(a, 0) = \log(\exp(a) + 1) \]
+\[ \textrm{RealSoftMax}(a, 0) = \log(\exp(a) + 1) \]
 
 The difference between the two functions is:
-\[ \text{RealSoftMax}(a, 0) - a = \log(\exp(a) + 1) - a \]
+\[ \textrm{RealSoftMax}(a, 0) - a = \log(\exp(a) + 1) - a \]
 
 As \( a \) becomes large, the difference approaches 0, but it's always positive because of the "+1" inside the logarithm.
 
-3. Prove that this holds for \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) \), provided that \( \lambda > 0 \):
+3. Prove that this holds for \( \lambda^{-1} \textrm{RealSoftMax}\left(\lambda a, \lambda b\right) \), provided that \( \lambda > 0 \):
 
 Given:
-\[ \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) = \lambda^{-1} \log(\exp(\lambda a) + \exp(\lambda b)) \]
+\[ \lambda^{-1} \textrm{RealSoftMax}\left(\lambda a, \lambda b\right) = \lambda^{-1} \log(\exp(\lambda a) + \exp(\lambda b)) \]
 
 Using the property of logarithms:
 \[ = \log(\exp(\lambda a) + \exp(\lambda b))^{\lambda^{-1}} \]
 
-Since \( \exp(\lambda a) \) and \( \exp(\lambda b) \) are both positive and \( \lambda > 0 \), the proof from part 1 applies here as well, and we can conclude that \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) > \max(a, b) \).
+Since \( \exp(\lambda a) \) and \( \exp(\lambda b) \) are both positive and \( \lambda > 0 \), the proof from part  applies here as well, and we can conclude that \( \lambda^{-1} \textrm{RealSoftMax}(\lambda a, \lambda b) > \max(a, b) \).
 
-4. Show that for \( \lambda \to \infty \) we have \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) \to \max(a, b) \):
+4. Show that for \( \lambda \to \infty \) we have \( \lambda^{-1} \textrm{RealSoftMax}(\lambda a, \lambda b) \to \max(a, b) \):
 
 As \( \lambda \) becomes very large, the term \( \exp(\lambda a) \) will dominate \( \exp(\lambda b) \) if \( a > b \). Thus:
 \[ \lambda^{-1} \log(\exp(\lambda a) + \exp(\lambda b)) \approx \lambda^{-1} \log(\exp(\lambda a)) = a \]
 
-Similarly, if \( b > a \), the result will be \( b \). Therefore, as \( \lambda \to \infty \), \( \lambda^{-1} \text{RealSoftMax}(\lambda a, \lambda b) \to \max(a, b) \).
+Similarly, if \( b > a \), the result will be \( b \).
+Therefore, as \( \lambda \to \infty \), \( \lambda^{-1} \textrm{RealSoftMax}(\lambda a, \lambda b) \to \max(a, b) \).
 
 5. Construct an analogous softmin function:
 
 The softmin function can be constructed using the negative of the inputs to the softmax function:
-\[ \text{RealSoftMin}(a, b) = -\text{RealSoftMax}(-a, -b) \]
+\[ \textrm{RealSoftMin}(a, b) = -\textrm{RealSoftMax}(-a, -b) \]
 \[ = \log(\exp(-a) + \exp(-b)) \]
 
 6. Extend this to more than two numbers:
 
 For \( n \) numbers \( a_1, a_2, \ldots, a_n \):
-\[ \text{RealSoftMax}(a_1, a_2, \ldots, a_n) = \log(\exp(a_1) + \exp(a_2) + \ldots + \exp(a_n)) \]
+\[ \textrm{RealSoftMax}(a_1, a_2, \ldots, a_n) = \log(\exp(a_1) + \exp(a_2) + \ldots + \exp(a_n)) \]
 
 Similarly, the softmin for \( n \) numbers is:
-\[ \text{RealSoftMin}(a_1, a_2, \ldots, a_n) = \log(\exp(-a_1) + \exp(-a_2) + \ldots + \exp(-a_n)) \]
+\[ \textrm{RealSoftMin}(a_1, a_2, \ldots, a_n) = \log(\exp(-a_1) + \exp(-a_2) + \ldots + \exp(-a_n)) \]
 
 \subsection{Exercise 4.5.5}
 
@@ -521,11 +523,15 @@ A \( 1 \times 1 \) convolution kernel operates on each pixel individually, witho
 
 Let's break down the implications of this:
 
-1. Independent Operation on Each Pixel: A \( 1 \times 1 \) convolution operates on each pixel independently. For an input with \( C_{in} \) channels, each pixel is represented by a \( C_{in} \)-dimensional vector. The \( 1 \times 1 \) convolution transforms this \( C_{in} \)-dimensional vector into a \( C_{out} \)-dimensional vector, where \( C_{out} \) is the number of output channels.
+1. Independent Operation on Each Pixel: A \( 1 \times 1 \) convolution operates on each pixel independently.
+For an input with \( C_{in} \) channels, each pixel is represented by a \( C_{in} \)-dimensional vector.
+The \( 1 \times 1 \) convolution transforms this \( C_{in} \)-dimensional vector into a \( C_{out} \)-dimensional vector, where \( C_{out} \) is the number of output channels.
 
-2. MLP for Each Set of Channels: The transformation from \( C_{in} \) to \( C_{out} \) for each pixel can be viewed as a fully connected layer (or MLP) applied independently to each spatial location. This is because the weights of the \( 1 \times 1 \) convolution kernel can be seen as the weights of a fully connected layer that connects each input channel to each output channel.
+2. MLP for Each Set of Channels: The transformation from \( C_{in} \) to \( C_{out} \) for each pixel can be viewed as a fully connected layer (or MLP) applied independently to each spatial location.
+This is because the weights of the \( 1 \times 1 \) convolution kernel can be seen as the weights of a fully connected layer that connects each input channel to each output channel.
 
-3. Network in Network (NiN): The idea of using \( 1 \times 1 \) convolutions to implement an MLP for each set of channels led to the Network in Network (NiN) architecture. In NiN, multiple \( 1 \times 1 \) convolutional layers are stacked, allowing for deep per-pixel transformations. This introduces additional non-linearity for each pixel without changing the spatial dimensions.
+3. Network in Network (NiN): The idea of using \( 1 \times 1 \) convolutions to implement an MLP for each set of channels led to the Network in Network (NiN) architecture.
+In NiN, multiple \( 1 \times 1 \) convolutional layers are stacked, allowing for deep per-pixel transformations. This introduces additional non-linearity for each pixel without changing the spatial dimensions.
 
 In summary, a \( 1 \times 1 \) convolution kernel effectively applies an MLP to each pixel independently, transforming the channels at each spatial location.
 This concept is central to the Network in Network (NiN) architecture, which uses \( 1 \times 1 \) convolutions to introduce additional non-linearities in the network without altering the spatial dimensions.
@@ -534,9 +540,11 @@ This concept is central to the Network in Network (NiN) architecture, which uses
 
 When an object is at the boundary of an image, and we apply convolutions, several issues and considerations arise:
 
-1. Loss of Information: The primary issue is that for pixels on the boundary, there aren't enough neighboring pixels to apply the convolution kernel fully. This means that these boundary pixels might not be processed adequately, leading to potential loss of information about objects at the image boundary.
+1. Loss of Information: The primary issue is that for pixels on the boundary, there aren't enough neighboring pixels to apply the convolution kernel fully.
+This means that these boundary pixels might not be processed adequately, leading to potential loss of information about objects at the image boundary.
 
-2. Padding: To address the boundary issue, one common approach is to add padding around the image. Padding involves adding extra pixels around the boundary of the image. There are different types of padding:
+2. Padding: To address the boundary issue, one common approach is to add padding around the image. Padding involves adding extra pixels around the boundary of the image.
+There are different types of padding:
 - Zero Padding: Adding pixels with a value of zero.
 - Reflect Padding: The boundary pixels are reflected. For instance, if the last row of an image is \([a, b, c]\), it becomes \([a, b, c, c, b, a]\) after reflect padding.
 - Replicate Padding: The boundary pixels are replicated. Using the previous example, it becomes \([a, b, c, c, c, c]\).
@@ -547,21 +555,23 @@ Padding ensures that every pixel, including those on the boundary, has a full ne
 - Valid Convolution: No padding is used. The resulting feature map after convolution is smaller than the input image because the kernel can only be applied to positions where it fits entirely within the image boundaries.
 - Same Convolution: Padding is added such that the output feature map has the same spatial dimensions as the input image.
 
-4. Edge Effects: Even with padding, objects at the boundary might be affected differently than objects in the center of the image. This is because the artificial values introduced by padding might not represent the actual image content. This can lead to edge artifacts in the output feature map.
+4. Edge Effects: Even with padding, objects at the boundary might be affected differently than objects in the center of the image.
+This is because the artificial values introduced by padding might not represent the actual image content. This can lead to edge artifacts in the output feature map.
 
 5. Dilated Convolutions: In dilated convolutions, where the kernel elements are spaced out by introducing gaps, the boundary effects can be even more pronounced, especially if the dilation rate is high.
 
-6. Pooling Layers: The boundary effects can also impact pooling layers (like max-pooling or average-pooling). If the pooling window doesn't fit entirely within the image or feature map boundaries, padding might be needed, or the pooling window might be truncated.
+6. Pooling Layers: The boundary effects can also impact pooling layers (like max-pooling or average-pooling).
+If the pooling window doesn't fit entirely within the image or feature map boundaries, padding might be needed, or the pooling window might be truncated.
 
 \paragraph{6. Prove that the convolution is symmetric, \(f * g = g * f\)}
 
 To prove that convolution is symmetric, we'll start with the definition of the convolution operation for two functions \( f(t) \) and \( g(t) \):
 
-\[ (f * g)(t) = \int_{-\infty}^{\infty} f(\tau) g(t - \tau) \, d\tau \]
+\[ \left(f * g\right)\left(t\right) = \int_{-\infty}^{\infty} f\left(\tau\right) g\left(t - \tau\right) \, d\tau \]
 
 Now, let's express the convolution of \( g \) and \( f \):
 
-\[ (g * f)(t) = \int_{-\infty}^{\infty} g(\tau) f(t - \tau) \, d\tau \]
+\[ \left(g * f\right)\left(t\right) = \int_{-\infty}^{\infty} g\left(\tau\right) f\left(t - \tau\right) \, d\tau \]
 
 To show that these two expressions are equivalent, we'll make a substitution:
 
