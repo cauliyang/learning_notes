@@ -21,7 +21,7 @@
 
 %%%%%%%%%%%%%%%%%%%%% glossaries %%%%%%%%%%%%%%%%%
 \input{glossaries}
-\makeglossaries\@
+\makeglossaries
 %%%%%%%%%%%%%%%%%%%%% glossaries %%%%%%%%%%%%%%%%%
 
 \input{macros}
@@ -67,7 +67,7 @@
 	\listoftheorems[ignoreall,show={definition}]
 \end{multicols}
 
-\printglossaries\@
+\printglossaries
 % \printglossary[type=\acronymtype]
 % \printglossary
 % \printglossary[title=List of terms, toctitle=List of terms]
@@ -80,7 +80,7 @@
 % \printunsrtglossary % main entry
 
 %%%%%%%%%%%%%%%Content%%%%%%%%%%%%%%%
-\mainmatter\@ % separate the number of toc and mainmatter
+\mainmatter % separate the number of toc and mainmatter
 \input{chapter/preface}
 
 \part{Machine Learning}
@@ -107,7 +107,7 @@
 	\input{chapter/appendix_formula}
 \end{appendices}
 
-\backmatter\@
+\backmatter
 
 %%%%%%%%%%%%%%% Reference %%%%%%%%%%%%%%%
 

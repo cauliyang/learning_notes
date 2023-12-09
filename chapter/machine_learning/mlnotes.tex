@@ -11,7 +11,7 @@ The naive algorithm takes $O\left(mnp\right)$ time.
 Row major, col major, stride
 
 
-\paragraph{How to calculate dimension of convolutional layer} % (fold)
+\paragraph{How to calculate dimension of convolutional layer}
 
 \[ \left\lfloor \frac{n_h - k_h + p_h + s_h}{s_h} \right\rfloor \times \left\lfloor \frac{n_w - k_w + p_w + s_w}{s_w} \right\rfloor \]
 
@@ -23,7 +23,8 @@ In which  \(n_h\)  means height of input, \(k_h\) means height of filter, \(p_h\
 
 \paragraph{Batch normalization}
 
-\[ \textrm{BN}\left(\bm{x}\right)  = \gamma  \odot \frac{\bm{x} - \hat{\bm \mu}_\mathcal{B}}{\hat{\bm \sigma}_\mathcal{B}} + \beta
+\[
+	\textrm{BN}\left(\bm{x}\right)  = \gamma  \odot \frac{\bm{x} - \hat{\bm \mu}_\mathcal{B}}{\hat{\bm \sigma}_\mathcal{B}} + \beta
 \]
 
 Batch normalization is a technique that drastically reduces this problem.
@@ -42,8 +43,7 @@ The moving average and standard deviation also need to be calculated for each ch
 In total, this gives four parameters for each channel in the preceding layer, where two are trainable and two are nontrainable~\cite{foster2022generative}.
 
 \begin{figure}
-	\begin{center}
-		\includegraphics[width=0.95\textwidth]{figures/batch_normlization_page_76}
+	\begin{center} \includegraphics[width=0.95\textwidth]{figures/batch_normlization_page_76}
 	\end{center}
 	\caption{Batch Normalization}\label{fig:batch_normalization}
 \end{figure}
@@ -62,7 +62,6 @@ In the end, all the intermediate results are summed over to produce the output~\
 
 
 \begin{figure}
-
 	\begin{center}
 		\includesvg[width=0.95\textwidth]{figures/trans_conv}
 	\end{center}
@@ -70,6 +69,21 @@ In the end, all the intermediate results are summed over to produce the output~\
 \end{figure}
 
 
+Different from in the regular convolution where padding is applied to input, it is applied to output in the transposed convolution.
+For example, when specifying the padding number on either side of the height and width as 1, the first and last rows and columns will be removed from the transposed convolution output.
 
-% chapter Notes (end)
+
+\begin{figure}
+	\begin{center}
+		\includesvg[width=0.95\textwidth]{figures/trans_conv_stride2}
+	\end{center}
+	\caption{Transposed convolution with a kernel with stride of \( 2 \times 2 \). The shaded portions are a portion of an intermediate tensor as well as the input and kernel tensor elements used for the computation.~\cite{zhang2023dive}}\label{fig:trans_conv_stide}
+\end{figure}
+
+
+Consider implementing the convolution by multiplying matrices.
+Given an input vector \( \mathbf{x} \) and a weight matrix \( \mathbf{W} \), the forward propagation function of the convolution can be implemented by multiplying its input with the weight matrix and outputting a vector \( y = \mathbf{W}\mathbf{x} \).
+Since backpropagation follows the chain rule and \( \nabla_{x}\mathbf{y} = \mathbf{W}^{\top}\), the backpropagation function of the convolution can be implemented by multiplying its input with the transposed weight matrix \( \mathbf{W}^{\top}\) .
+Therefore, the transposed convolutional layer can just exchange the forward propagation function and the backpropagation function of the convolutional layer: its forward propagation and backpropagation functions multiply their input vector with \( \mathbf{W}^{\top}  \) and \( \mathbf{W} \), respectively~\cite{zhang2023dive}.
+
 
