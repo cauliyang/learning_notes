@@ -1,5 +1,6 @@
 \chapter{Generative Deep Learning}\label{chp:generative_deep_learning}
 
+
 \section{Intro to Deep Generative Models}
 
 
@@ -13,8 +14,7 @@ Discriminative models vs Generative models
 \paragraph{The Generative Modeling Framework}
 
 \begin{itemize}
-	\item We have a dataset of Observations $\mathbf{X}$.
-	\item We assume that the observations have been generated according to some unknown distribution \(\mathcal{P}_{\textrm{data}}\)
+	\item We have a dataset of Observations $\mathbf{X}$. \item We assume that the observations have been generated according to some unknown distribution \(\mathcal{P}_{\textrm{data}}\)
 	\item We want to build a generative model \(\mathcal{P}_{\textrm{model}}\) that mimics \(\mathcal{P}_{\textrm{data}}\) to generate observations that appear to have been drawn from \(\mathcal{P}_{\textrm{data}}\)
 	\item Therefore, the desirable properties of \(\mathcal{P}_{\textrm{data}}\) are:
 
@@ -50,5 +50,30 @@ If you do choose to use batch normalization before activation, you can remember 
 \section{Variational Autoencoders}
 
 
+\paragraph{The Reparameterization Trick}
 
+
+Rather than sample directly from a normal distribution with parameters z\_mean and z\_log\_var, we can sample epsilon from a standard normal and then manually adjust the sample to have the correct mean and variance.
+This is known as the reparameterization trick, and it’s important as it means gradients can backpropagate freely through the layer.
+By keeping all of the randomness of the layer contained within the variable epsilon, the partial derivative of the layer output with respect to its input can be shown to be deterministic (i.e., independent of the random epsilon), which is essential for backpropagation through the layer to be possible.
+
+\paragraph{\gls{kl} Divergence}
+
+\[
+	D_{\mathrm{KL}}\left[N\left(\mu,\sigma\right)||N\left(0,1\right)\right] = \frac{1}{2} \sum_{i=1}^n \left(\sigma_i^2 + \mu_i^2 - 1 - \log \sigma_i^2\right)
+	.\]
+
+
+In summary, the \gls{kl}  divergence term penalizes the network for encoding observations to  z\_mean and  z\_log\_var  variables that differ significantly from the parameters of a standard normal distribution, namely \( z\_mean = 0 \) and \( z\_log\_var = 0 \).
+
+Why does this addition to the loss function help?
+
+Firstly, we now have a well-defined distribution that we can use for choosing points in the latent space—the standard normal distribution.
+Secondly, since this term tries to force all encoded distributions toward the standard normal distribution, there is less chance that large gaps will form between point clusters.
+Instead, the encoder will try to use the space around the origin symmetrically and efficiently.
+
+In the original \gls{vae}  paper, the loss function for a VAE was simply the addition of the reconstruction loss and the KL divergence loss term.
+A variant on this (the β-VAE) includes a factor that weights the \gls{kl}  divergence to ensure that it is well balanced with the reconstruction loss.
+If we weight the reconstruction loss too heavily, the \gls{kl} loss will not have the desired regulatory effect and we will see the same problems that we experienced with the plain autoencoder.
+If the \gls{kl}  divergence term is weighted too heavily, the \gls{kl}  divergence loss will dominate and the reconstructed images will be poor. This weighting term is one of the parameters to tune when you’re training your VAE~\cite{foster2022generative}.
 
