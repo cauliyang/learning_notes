@@ -79,7 +79,9 @@ If the \gls{kl}  divergence term is weighted too heavily, the \gls{kl}  divergen
 \paragraph{Latent Space Arithmetic}
 
 
-One benefit of mapping images into a lower-dimensional latent space is that we can perform arithmetic on vectors in this latent space that has a visual analogue when decoded back into the original image domain~\cref{fig:vae_latent_space_arithmetic}.
+
+
+One benefit of mapping images into a lower-dimensional latent space is that we can perform arithmetic on vectors in this latent space that has a visual analogue when decoded back into the original image domain~\autoref{fig:vae_latent_space_arithmetic}.
 
 For example, suppose we want to take an image of somebody who looks sad and give them a smile.
 To do this we first need to find a vector in the latent space that points in the direction of increasing smile.
@@ -102,8 +104,7 @@ The UpSampling2D layer simply repeats each row and column of its input in order 
 The Conv2D layer with stride 1 then performs the convolution operation.
 It is a similar idea to convolutional transpose, but instead of filling the gaps between pixels with zeros, upsampling just repeats the existing pixel values.
 
-
-It has been shown that the Conv2DTranspose method can lead to artifacts, or small checkerboard patterns in the output image (see~\cref{fig:upsampling}) that spoil the quality of the output.
+It has been shown that the Conv2DTranspose method can lead to artifacts, or small checkerboard patterns in the output image (see~\autoref{fig:upsampling}) that spoil the quality of the output.
 However, they are still used in many of the most impressive \glspl{gan}  in the literature and have proven to be a powerful tool in the deep learning practitioner’s toolbox.
 
 \begin{figure}
@@ -124,7 +125,6 @@ This label smoothing acts as way to tame the discriminator, so that it is presen
 Another requirement of a successful generative model is that it doesn’t only reproduce images from the training set.
 To test this, we can find the image from the training set that is closest to a particular generated example. A good measure for distance is the L1 distance, defined as:
 
-
 \[
 	\mathrm{L1}(\mathbf{a},\mathbf{b}) = \frac{1}{n} \sum_{i=1}^n |a_i - b_i|
 	.\]
@@ -135,9 +135,57 @@ While \glspl{gan}  are a major breakthrough for generative modeling, they are al
 We will explore some of the most common problems and challenges encountered when training \glspl{gan}  in this section, alongside potential solutions.
 In the next section, we will look at some more fundamental adjustments to the \gls{gan} framework that we can make to remedy many of these problems~\cite{foster2022generative}.
 
-
 \paragraph{Discriminator overpowering the generator}
 
+If the discriminator becomes too strong, the signal from the loss function becomes too weak to drive any meaningful improvements in the generator.
+In the worst-case scenario, the discriminator perfectly learns to separate real images from fake images and the gradients vanish completely, leading to no training whatsoever,
+
+If you find your discriminator loss function collapsing, you need to find ways to weaken the discriminator. Try the following suggestions:
+
+\begin{itemize}
+	\item Increase the rate parameter of the Dropout layers in the discriminator to dampen the amount of information that flows through the network.
+	\item Reduce the learning rate of the discriminator.
+	\item Reduce the number of convolutional filters in the discriminator.
+	\item Add noise to the labels when training the discriminator.
+	\item Flip the labels of some images at random when training the discriminator.
+\end{itemize}
 
 
 
+\paragraph{Generator overpowering the discriminator}
+
+If the discriminator is not powerful enough, the generator will find ways to easily trick the discriminator with a small sample of nearly identical images.
+This is known as mode collapse.
+
+For example, suppose we were to train the generator over several batches without updating the discriminator in between.
+The generator would be inclined to find a single observation (also known as a mode) that always fools the discriminator and would start to map every point in the latent input space to this image.
+Moreover, the gradients of the loss function would collapse to near 0, so it wouldn’t be able to recover from this state.
+
+Even if we then tried to retrain the discriminator to stop it being fooled by this one point, the generator would simply find another mode that fools the discriminator, since it has already become numb to its input and therefore has no incentive to diversify its output.
+
+If you find that your generator is suffering from mode collapse, you can try strengthening the discriminator using the opposite suggestions to those listed in the previous section.
+Also, you can try reducing the learning rate of both networks and increasing the batch size.
+
+\paragraph{Uninformative Loss}
+
+Since the deep learning model is compiled to minimize the loss function, it would be natural to think that the smaller the loss function of the generator, the better the quality of the images produced.
+However, since the generator is only graded against the current discriminator and the discriminator is constantly improving, we cannot compare the loss function evaluated at different points in the training process.
+Indeed the loss function of the generator actually increases over time, even though the quality of the images is clearly improving.
+This lack of correlation between the generator loss and image quality sometimes makes GAN training difficult to monitor.
+
+
+\paragraph{Hyperparameter}
+
+As we have seen, even with simple GANs, there are a large number of hyperparameters to tune.
+As well as the overall architecture of both the discriminator and the generator, there are the parameters that govern batch normalization, dropout, learning rate, activation layers, convolutional filters, kernel size, striding, batch size, and latent space size to consider.
+GANs are highly sensitive to very slight changes in all of these parameters, and finding a set of parameters that works is often a case of educated trial and error, rather than following an established set of guidelines.
+
+\paragraph{\gls{wgangp}}
+
+\gls{wgangp} brings a meaningful loss metric that correlates with the generator’s convergence and sample quality, and improved stability of the optimization process.
+
+
+\begin{equation}
+	-\frac{1}{n} \sum_{i=1}^{n} \left(y_i \log\left(p_i\right) + \left(1 - y_i\right)\log \left(1-p_i\right)\right)
+	\label{eq:binary_cross_entropy_loss}
+\end{equation}
