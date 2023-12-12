@@ -1,8 +1,6 @@
 \chapter{Generative Deep Learning}\label{chp:generative_deep_learning}
 
-
 \section{Intro to Deep Generative Models}
-
 
 What Is Generative Modeling?
 
@@ -73,7 +71,73 @@ Secondly, since this term tries to force all encoded distributions toward the st
 Instead, the encoder will try to use the space around the origin symmetrically and efficiently.
 
 In the original \gls{vae}  paper, the loss function for a VAE was simply the addition of the reconstruction loss and the KL divergence loss term.
-A variant on this (the β-VAE) includes a factor that weights the \gls{kl}  divergence to ensure that it is well balanced with the reconstruction loss.
+A variant on this (the $\beta$-VAE) includes a factor that weights the \gls{kl}  divergence to ensure that it is well balanced with the reconstruction loss.
 If we weight the reconstruction loss too heavily, the \gls{kl} loss will not have the desired regulatory effect and we will see the same problems that we experienced with the plain autoencoder.
 If the \gls{kl}  divergence term is weighted too heavily, the \gls{kl}  divergence loss will dominate and the reconstructed images will be poor. This weighting term is one of the parameters to tune when you’re training your VAE~\cite{foster2022generative}.
+
+
+\paragraph{Latent Space Arithmetic}
+
+
+One benefit of mapping images into a lower-dimensional latent space is that we can perform arithmetic on vectors in this latent space that has a visual analogue when decoded back into the original image domain~\cref{fig:vae_latent_space_arithmetic}.
+
+For example, suppose we want to take an image of somebody who looks sad and give them a smile.
+To do this we first need to find a vector in the latent space that points in the direction of increasing smile.
+Adding this vector to the encoding of the original image in the latent space will give us a new point which, when decoded, should give us a more smiley version of the original image~\cite{foster2022generative}.
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/vae_latent_space_arithmetic}
+	\end{center}
+	\caption{Adding and subtracting features to and from faces}\label{fig:vae_latent_space_arithmetic}
+\end{figure}
+
+
+\section{Generative Adversarial Networks}
+
+\paragraph{Upsampling vs Transposed Convolution}
+
+The UpSampling2D layer simply repeats each row and column of its input in order to double the size.
+The Conv2D layer with stride 1 then performs the convolution operation.
+It is a similar idea to convolutional transpose, but instead of filling the gaps between pixels with zeros, upsampling just repeats the existing pixel values.
+
+
+It has been shown that the Conv2DTranspose method can lead to artifacts, or small checkerboard patterns in the output image (see~\cref{fig:upsampling}) that spoil the quality of the output.
+However, they are still used in many of the most impressive \glspl{gan}  in the literature and have proven to be a powerful tool in the deep learning practitioner’s toolbox.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/upsampling}
+	\end{center}
+	\caption{Artifacts when using convolutional transpose layers}\label{fig:upsampling}
+\end{figure}
+
+
+\paragraph{Adding Noise to the Labels}
+
+A useful trick when training \glspl{gan}  is to add a small amount of random noise to the training labels.
+This helps to improve the stability of the training process and sharpen the generated images.
+This label smoothing acts as way to tame the discriminator, so that it is presented with a more challenging task and doesn’t overpower the generator.
+
+
+Another requirement of a successful generative model is that it doesn’t only reproduce images from the training set.
+To test this, we can find the image from the training set that is closest to a particular generated example. A good measure for distance is the L1 distance, defined as:
+
+
+\[
+	\mathrm{L1}(\mathbf{a},\mathbf{b}) = \frac{1}{n} \sum_{i=1}^n |a_i - b_i|
+	.\]
+
+\subsection{\gls{gan} Training Tips}
+
+While \glspl{gan}  are a major breakthrough for generative modeling, they are also notoriously difficult to train.
+We will explore some of the most common problems and challenges encountered when training \glspl{gan}  in this section, alongside potential solutions.
+In the next section, we will look at some more fundamental adjustments to the \gls{gan} framework that we can make to remedy many of these problems~\cite{foster2022generative}.
+
+
+\paragraph{Discriminator overpowering the generator}
+
+
+
 
