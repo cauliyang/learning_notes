@@ -23,9 +23,7 @@ Discriminative models vs Generative models
 	      3. Representation:  it should be possible to understand how different high-level features in the data are represented by \(\mathcal{P}_{\textrm{model}}\)
 \end{itemize}
 
-
 \paragraph{Generative Model Taxonomy}
-
 
 \begin{itemize}
 	\item Explicitly model the density function, but constrain the model in some way, so that the density function s tractable (i.e. it can be calculated)
@@ -47,9 +45,7 @@ If you do choose to use batch normalization before activation, you can remember 
 
 \section{Variational Autoencoders}
 
-
 \paragraph{The Reparameterization Trick}
-
 
 Rather than sample directly from a normal distribution with parameters z\_mean and z\_log\_var, we can sample epsilon from a standard normal and then manually adjust the sample to have the correct mean and variance.
 This is known as the reparameterization trick, and it’s important as it means gradients can backpropagate freely through the layer.
@@ -75,11 +71,7 @@ A variant on this (the $\beta$-VAE) includes a factor that weights the \gls{kl} 
 If we weight the reconstruction loss too heavily, the \gls{kl} loss will not have the desired regulatory effect and we will see the same problems that we experienced with the plain autoencoder.
 If the \gls{kl}  divergence term is weighted too heavily, the \gls{kl}  divergence loss will dominate and the reconstructed images will be poor. This weighting term is one of the parameters to tune when you’re training your VAE~\cite{foster2022generative}.
 
-
 \paragraph{Latent Space Arithmetic}
-
-
-
 
 One benefit of mapping images into a lower-dimensional latent space is that we can perform arithmetic on vectors in this latent space that has a visual analogue when decoded back into the original image domain~\autoref{fig:vae_latent_space_arithmetic}.
 
@@ -87,14 +79,12 @@ For example, suppose we want to take an image of somebody who looks sad and give
 To do this we first need to find a vector in the latent space that points in the direction of increasing smile.
 Adding this vector to the encoding of the original image in the latent space will give us a new point which, when decoded, should give us a more smiley version of the original image~\cite{foster2022generative}.
 
-
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{figures/vae_latent_space_arithmetic}
 	\end{center}
 	\caption{Adding and subtracting features to and from faces}\label{fig:vae_latent_space_arithmetic}
 \end{figure}
-
 
 \section{Generative Adversarial Networks}
 
@@ -114,13 +104,11 @@ However, they are still used in many of the most impressive \glspl{gan}  in the 
 	\caption{Artifacts when using convolutional transpose layers}\label{fig:upsampling}
 \end{figure}
 
-
 \paragraph{Adding Noise to the Labels}
 
 A useful trick when training \glspl{gan}  is to add a small amount of random noise to the training labels.
 This helps to improve the stability of the training process and sharpen the generated images.
 This label smoothing acts as way to tame the discriminator, so that it is presented with a more challenging task and doesn’t overpower the generator.
-
 
 Another requirement of a successful generative model is that it doesn’t only reproduce images from the training set.
 To test this, we can find the image from the training set that is closest to a particular generated example. A good measure for distance is the L1 distance, defined as:
@@ -150,8 +138,6 @@ If you find your discriminator loss function collapsing, you need to find ways t
 	\item Flip the labels of some images at random when training the discriminator.
 \end{itemize}
 
-
-
 \paragraph{Generator overpowering the discriminator}
 
 If the discriminator is not powerful enough, the generator will find ways to easily trick the discriminator with a small sample of nearly identical images.
@@ -171,8 +157,7 @@ Also, you can try reducing the learning rate of both networks and increasing the
 Since the deep learning model is compiled to minimize the loss function, it would be natural to think that the smaller the loss function of the generator, the better the quality of the images produced.
 However, since the generator is only graded against the current discriminator and the discriminator is constantly improving, we cannot compare the loss function evaluated at different points in the training process.
 Indeed the loss function of the generator actually increases over time, even though the quality of the images is clearly improving.
-This lack of correlation between the generator loss and image quality sometimes makes GAN training difficult to monitor.
-
+This lack of correlation between the generator loss and image quality sometimes makes \gls{gan} training difficult to monitor.
 
 \paragraph{Hyperparameter}
 
@@ -182,10 +167,39 @@ GANs are highly sensitive to very slight changes in all of these parameters, and
 
 \paragraph{\gls{wgangp}}
 
-\gls{wgangp} brings a meaningful loss metric that correlates with the generator’s convergence and sample quality, and improved stability of the optimization process.
+\gls{wgangp}~\autoref{fig:wgangp_training} brings a meaningful loss metric that correlates with the generator’s convergence and sample quality, and improved stability of the optimization process.
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/wgangp_train}
+	\end{center}
+	\caption{The \gls{wgangp}  critic training process}\label{fig:wgangp_training}
+\end{figure}
 
 \begin{equation}
 	-\frac{1}{n} \sum_{i=1}^{n} \left(y_i \log\left(p_i\right) + \left(1 - y_i\right)\log \left(1-p_i\right)\right)
 	\label{eq:binary_cross_entropy_loss}
 \end{equation}
+
+One last consideration we should note before training a \gls{wgangp} is that batch normalization shouldn’t be used in the critic.
+This is because batch normalization creates correlation between images in the same batch, which makes the gradient penalty loss less effective.
+Experiments have shown that \glspl{wgangp}  can still produce excellent results even without batch normalization in the critic.
+We have now covered all of the key differences between a standard GAN and a \gls{wgangp}. To recap:
+
+\begin{itemize}
+	\item A \gls{wgangp} uses the Wasserstein loss.
+	\item The \gls{wgangp}  is trained using labels of 1 for real and –1 for fake.
+	\item There is no sigmoid activation in the final layer of the critic.
+	\item Include a gradient penalty term in the loss function for the critic.
+	\item Train the critic multiple times for each update of the generator.
+	\item There are no batch normalization layers in the critic.
+\end{itemize}
+
+\paragraph{\gls{cgan}}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/cgan}
+	\end{center}
+	\caption{Inputs and outputs of the generator and critic in a CGAN}\label{fig:cgan}
+\end{figure}
