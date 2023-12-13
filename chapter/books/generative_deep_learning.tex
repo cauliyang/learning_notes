@@ -73,7 +73,7 @@ If the \gls{kl}  divergence term is weighted too heavily, the \gls{kl}  divergen
 
 \paragraph{Latent Space Arithmetic}
 
-One benefit of mapping images into a lower-dimensional latent space is that we can perform arithmetic on vectors in this latent space that has a visual analogue when decoded back into the original image domain~\autoref{fig:vae_latent_space_arithmetic}.
+One benefit of mapping images into a lower-dimensional latent space is that we can perform arithmetic on vectors in this latent space that has a visual analogue when decoded back into the original image domain~\pautoref{fig:vae_latent_space_arithmetic}.
 
 For example, suppose we want to take an image of somebody who looks sad and give them a smile.
 To do this we first need to find a vector in the latent space that points in the direction of increasing smile.
@@ -167,7 +167,7 @@ GANs are highly sensitive to very slight changes in all of these parameters, and
 
 \paragraph{\gls{wgangp}}
 
-\gls{wgangp}~\autoref{fig:wgangp_training} brings a meaningful loss metric that correlates with the generator’s convergence and sample quality, and improved stability of the optimization process.
+\gls{wgangp}~\pautoref{fig:wgangp_training} brings a meaningful loss metric that correlates with the generator’s convergence and sample quality, and improved stability of the optimization process.
 
 \begin{figure}
 	\begin{center}
@@ -203,4 +203,147 @@ We have now covered all of the key differences between a standard GAN and a \gls
 	\end{center}
 	\caption{Inputs and outputs of the generator and critic in a CGAN}\label{fig:cgan}
 \end{figure}
+
+\paragraph{Summary}
+
+we explored three different \gls{gan} models: the \gls{dcgan}, the more sophisticated \gls{wgangp}, and the \gls{cgan}.
+
+All \glspl{gan} are characterized by a generator versus discriminator (or critic) architecture, with the discriminator trying to ``spot the difference'' between real and fake images and the generator aiming to fool the discriminator.
+By balancing how these two adversaries are trained, the \gls{gan} generator can gradually learn how to produce similar observations to those in the training set.
+
+We first saw how to train a \gls{dcgan} to generate images of toy bricks.
+It was able to learn how to realistically represent 3D objects as images, including accurate representations of shadow, shape, and texture.
+We also explored the different ways in which \gls{gan} training can fail, including mode collapse and vanishing gradients~\cite{foster2022generative}.
+
+\section{Autoregressive Models}
+
+
+\paragraph{Working with Text Data}
+
+There are several key differences between text and image data that mean that many of the methods that work well for image data are not so readily applicable to text data.
+In particular:
+
+\begin{itemize}
+	\item Text data is composed of discrete chunks (either characters or words), whereas pixels in an image are points in a continuous color spectrum.
+	      We can easily make a green pixel more blue, but it is not obvious how we should go about making the word cat more like the word dog, for example.
+	      This means we can easily apply backpropagation to image data, as we can calculate the gradient of our loss function with respect to individual pixels to establish the direction in which pixel colors should be changed to minimize the loss.
+	      With discrete text data, we can’t obviously apply backpropagation in the same way, so we need to find a way around this problem.
+
+	\item Text data has a time dimension but no spatial dimension, whereas image data has two spatial dimensions but no time dimension.
+	      The order of words is highly important in text data and words wouldn’t make sense in reverse, whereas images can usually be flipped without affecting the content.
+	      Furthermore, there are often long-term sequential dependencies between words that need to be captured by the model: for example, the answer to a question or carrying forward the context of a pronoun.
+	      With image data, all pixels can be processed simultaneously.
+
+	\item Text data is highly sensitive to small changes in the individual units (words or characters).
+	      Image data is generally less sensitive to changes in individual pixel units—a picture of a house would still be recognizable as a house even if some pixels were altered—but with text data, changing even a few words can drastically alter the meaning of the passage, or make it nonsensical.
+	      This makes it very difficult to train a model to generate coherent text, as every word is vital to the overall meaning of the passage.
+
+	\item Text data has a rules-based grammatical structure, whereas image data doesn’t follow set rules about how the pixel values should be assigned.
+	      For example, it wouldn’t make grammatical sense in any context to write ``The cat sat on the having.''
+	      There are also semantic rules that are extremely difficult to model; it wouldn’t make sense to say ``I am in the beach,'' even though grammatically, there is nothing wrong with this statement.
+\end{itemize}
+
+\paragraph{Tokenization}
+
+If you use word tokens:
+
+\begin{itemize}
+	\item  All text can be converted to lowercase, to ensure capitalized words at the start of sentences are tokenized the same way as the same words appearing in the middle of a sentence.
+	      In some cases, however, this may not be desirable; for example, some proper nouns, such as names or places, may benefit from remaining capitalized so that they are tokenized independently.
+
+	\item  The text vocabulary (the set of distinct words in the training set) may be very large, with some words appearing very sparsely or perhaps only once.
+	      It may be wise to replace sparse words with a token for unknown word, rather than including them as separate tokens, to reduce the number of weights the neural network needs to learn.
+
+	\item  Words can be stemmed, meaning that they are reduced to their simplest form, so that different tenses of a verb remained tokenized together.
+	      For example, browse, browsing, browses, and browsed would all be stemmed to brows.
+
+	\item  You will need to either tokenize the punctuation, or remove it altogether.
+	\item  Using word tokenization means that the model will never be able to predict words outside of the training vocabulary.
+\end{itemize}
+
+
+If you use character tokens:
+
+\begin{itemize}
+	\item The model may generate sequences of characters that form new words outside of the training vocabulary—this may be desirable in some contexts, but not in others.
+
+	\item Capital letters can either be converted to their lowercase counterparts, or remain as separate tokens.
+
+	\item The vocabulary is usually much smaller when using character tokenization. This is beneficial for model training speed as there are fewer weights to learn in the final output layer.
+\end{itemize}
+
+
+\paragraph{\gls{lstm}}
+
+
+A recurrent layer has the special property of being able to process sequential input data \(x_{1}, \ldots , x_{n} \).
+It consists of a cell that updates its hidden state, \( h_{t}\), as each element of the sequence \( x_{t} \) is passed through it, one timestep at a time.
+
+The hidden state is a vector with length equal to the number of units in the cell.
+it can be thought of as the cell’s current understanding of the sequence.
+At timestep \( t \), the cell uses the previous value of the hidden state,\( h_{t-1} \), together with the data from the current timestep \( x_{t} \) to produce an updated hidden state vector, \( h_t\).
+This recurrent process continues until the end of the sequence.
+Once the sequence is finished, the layer outputs the final hidden state of the cell, \( h_n \),
+It’s important to remember that all of the cells in this diagram share the same weights (as they are really the same cell).
+
+We represent the recurrent process by drawing a copy of the cell at each timestep and show how the hidden state is constantly being updated as it flows through the cells~\pautoref{fig:recurrent_layer}.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/recurrent_layer}
+    \end{center}
+    \caption{How a single sequence flows through a recurrent layer}\label{fig:recurrent_layer}
+\end{figure}
+
+
+The hidden state is updated in six steps~\pautoref{fig:lstm_cell}:
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/lstm_cell}
+    \end{center}
+    \caption{An \gls{lstm} Cell}\label{fig:lstm_cell}
+\end{figure}
+
+
+\begin{enumerate}
+    \item The hidden state of the previous timestep, \( h_{t-1} \), and the current word embedding, \( x_t \), are concatenated and passed through the forget gate.
+This gate is simply a dense layer with weights matrix  \( \mathbf{W}_{f}\) , bias \( b_f \), and a sigmoid activation function.
+The resulting vector, \( f_tl \), has length equal to the number of units in the cell and contains values between 0 and 1 that determine how much of the previous cell state, \( C_{t-1}\), should be retained.
+
+\item The concatenated vector is also passed through an input gate that, like the forget gate, is a dense layer with weights matrix \( \mathbf{W}_i\), bias \( b_i \), and a sigmoid activation function.
+The output from this gate, \( i_t \), has length equal to the number of units in the cell and contains values between 0 and 1 that determine how much new information will be added to the previous cell state, \( C_{t-1}\).
+
+\item The concatenated vector is passed through a dense layer with weights matrix \( \mathbf{W}_C \), bias \( b_C \), and a tanh activation function to generate a vector \( \tilde{C_t} \) that contains the new information that the cell wants to consider keeping.
+It also has length equal to the number of units in the cell and contains values between –1 and 1.
+
+\item \( f_t \) and \( C_{t-1} \) are multiplied element-wise and added to the element-wise multiplication of \( i_t \) and \( \tilde{C_t}\).
+This represents forgetting parts of the previous cell state and then adding new relevant information to produce the updated cell state, \( C_t \).
+
+\item The concatenated vector is passed through an output gate: a dense layer with weights matrix \( \mathbf{W}_o \), bias \( b_o \), and a sigmoid activation.
+The resulting vector, \( o_t \), has length equal to the number of units in the cell and stores values between 0 and 1 that determine how much of the updated cell state, \( C_t \), to output from the cell.
+
+\item \( o_t\) is multiplied element-wise with the updated cell state, \( C_t \), after a tanh activation has been applied to produce the new hidden state, \( h_t \).
+\end{enumerate}
+
+\paragraph{\gls{gru}}
+
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/gru}
+    \end{center}
+    \caption{A single \gls{gru} cell}\label{fig:gru}
+\end{figure}
+
+Another type of commonly used \gls{rnn} layer is the \gls{gru}~\pautoref{fig:gru}.
+The key differences from the \gls{lstm} unit are as follows:
+
+\begin{enumerate}
+    \item The forget and input gates are replaced by reset and update gates.
+    \item There is no cell state or output gate, only a hidden state that is output from the cell.
+\end{enumerate}
+
+
+
 
