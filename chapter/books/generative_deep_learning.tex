@@ -217,7 +217,6 @@ We also explored the different ways in which \gls{gan} training can fail, includ
 
 \section{Autoregressive Models}
 
-
 \paragraph{Working with Text Data}
 
 There are several key differences between text and image data that mean that many of the methods that work well for image data are not so readily applicable to text data.
@@ -289,61 +288,66 @@ It’s important to remember that all of the cells in this diagram share the sam
 We represent the recurrent process by drawing a copy of the cell at each timestep and show how the hidden state is constantly being updated as it flows through the cells~\pautoref{fig:recurrent_layer}.
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{figures/recurrent_layer}
-    \end{center}
-    \caption{How a single sequence flows through a recurrent layer}\label{fig:recurrent_layer}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/recurrent_layer}
+	\end{center}
+	\caption{How a single sequence flows through a recurrent layer}\label{fig:recurrent_layer}
 \end{figure}
 
 
 The hidden state is updated in six steps~\pautoref{fig:lstm_cell}:
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{figures/lstm_cell}
-    \end{center}
-    \caption{An \gls{lstm} Cell}\label{fig:lstm_cell}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/lstm_cell}
+	\end{center}
+	\caption{An \gls{lstm} Cell}\label{fig:lstm_cell}
 \end{figure}
 
 
 \begin{enumerate}
-    \item The hidden state of the previous timestep, \( h_{t-1} \), and the current word embedding, \( x_t \), are concatenated and passed through the forget gate.
-This gate is simply a dense layer with weights matrix  \( \mathbf{W}_{f}\) , bias \( b_f \), and a sigmoid activation function.
-The resulting vector, \( f_tl \), has length equal to the number of units in the cell and contains values between 0 and 1 that determine how much of the previous cell state, \( C_{t-1}\), should be retained.
+	\item The hidden state of the previous timestep, \( h_{t-1} \), and the current word embedding, \( x_t \), are concatenated and passed through the forget gate.
+	      This gate is simply a dense layer with weights matrix  \( \mathbf{W}_{f}\) , bias \( b_f \), and a sigmoid activation function.
+	      The resulting vector, \( f_tl \), has length equal to the number of units in the cell and contains values between 0 and 1 that determine how much of the previous cell state, \( C_{t-1}\), should be retained.
 
-\item The concatenated vector is also passed through an input gate that, like the forget gate, is a dense layer with weights matrix \( \mathbf{W}_i\), bias \( b_i \), and a sigmoid activation function.
-The output from this gate, \( i_t \), has length equal to the number of units in the cell and contains values between 0 and 1 that determine how much new information will be added to the previous cell state, \( C_{t-1}\).
+	\item The concatenated vector is also passed through an input gate that, like the forget gate, is a dense layer with weights matrix \( \mathbf{W}_i\), bias \( b_i \), and a sigmoid activation function.
+	      The output from this gate, \( i_t \), has length equal to the number of units in the cell and contains values between 0 and 1 that determine how much new information will be added to the previous cell state, \( C_{t-1}\).
 
-\item The concatenated vector is passed through a dense layer with weights matrix \( \mathbf{W}_C \), bias \( b_C \), and a tanh activation function to generate a vector \( \tilde{C_t} \) that contains the new information that the cell wants to consider keeping.
-It also has length equal to the number of units in the cell and contains values between –1 and 1.
+	\item The concatenated vector is passed through a dense layer with weights matrix \( \mathbf{W}_C \), bias \( b_C \), and a tanh activation function to generate a vector \( \tilde{C_t} \) that contains the new information that the cell wants to consider keeping.
+	      It also has length equal to the number of units in the cell and contains values between –1 and 1.
 
-\item \( f_t \) and \( C_{t-1} \) are multiplied element-wise and added to the element-wise multiplication of \( i_t \) and \( \tilde{C_t}\).
-This represents forgetting parts of the previous cell state and then adding new relevant information to produce the updated cell state, \( C_t \).
+	\item \( f_t \) and \( C_{t-1} \) are multiplied element-wise and added to the element-wise multiplication of \( i_t \) and \( \tilde{C_t}\).
+	      This represents forgetting parts of the previous cell state and then adding new relevant information to produce the updated cell state, \( C_t \).
 
-\item The concatenated vector is passed through an output gate: a dense layer with weights matrix \( \mathbf{W}_o \), bias \( b_o \), and a sigmoid activation.
-The resulting vector, \( o_t \), has length equal to the number of units in the cell and stores values between 0 and 1 that determine how much of the updated cell state, \( C_t \), to output from the cell.
+	\item The concatenated vector is passed through an output gate: a dense layer with weights matrix \( \mathbf{W}_o \), bias \( b_o \), and a sigmoid activation.
+	      The resulting vector, \( o_t \), has length equal to the number of units in the cell and stores values between 0 and 1 that determine how much of the updated cell state, \( C_t \), to output from the cell.
 
-\item \( o_t\) is multiplied element-wise with the updated cell state, \( C_t \), after a tanh activation has been applied to produce the new hidden state, \( h_t \).
+	\item \( o_t\) is multiplied element-wise with the updated cell state, \( C_t \), after a tanh activation has been applied to produce the new hidden state, \( h_t \).
 \end{enumerate}
 
 \paragraph{\gls{gru}}
 
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{figures/gru}
-    \end{center}
-    \caption{A single \gls{gru} cell}\label{fig:gru}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/gru}
+	\end{center}
+	\caption{A single \gls{gru} cell}\label{fig:gru}
 \end{figure}
 
 Another type of commonly used \gls{rnn} layer is the \gls{gru}~\pautoref{fig:gru}.
 The key differences from the \gls{lstm} unit are as follows:
 
 \begin{enumerate}
-    \item The forget and input gates are replaced by reset and update gates.
-    \item There is no cell state or output gate, only a hidden state that is output from the cell.
+	\item The forget and input gates are replaced by reset and update gates.
+	\item There is no cell state or output gate, only a hidden state that is output from the cell.
 \end{enumerate}
 
 
+\section{Normalizing Flow Models}
 
+Normalizing flows share similarities with both autoregressive models and \glspl{vae}.
+Like autoregressive models, normalizing flows are able to explicitly and tractably model the data-generating distribution \(\mathcal{P}_{x}\).
+Like \glspl{vae}, normalizing flows attempt to map the data into a simpler distribution, such as a Gaussian distribution.
+The key difference is that normalizing flows place a constraint on the form of the mapping function, so that it is invertible and can therefore be used to generate new data points.
 
