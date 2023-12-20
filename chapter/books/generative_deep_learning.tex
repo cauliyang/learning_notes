@@ -2,7 +2,7 @@
 
 \section{Intro to Deep Generative Models}
 
-What Is Generative Modeling?
+What is Generative Modeling?
 
 Generative modeling can be broadly defined as follows:
 Generative modeling is a branch of machine learning that involves training a model to produce new data that is similar to a given dataset~\cite{foster2022generative}.
@@ -350,4 +350,41 @@ Normalizing flows share similarities with both autoregressive models and \glspl{
 Like autoregressive models, normalizing flows are able to explicitly and tractably model the data-generating distribution \(\mathcal{P}_{x}\).
 Like \glspl{vae}, normalizing flows attempt to map the data into a simpler distribution, such as a Gaussian distribution.
 The key difference is that normalizing flows place a constraint on the form of the mapping function, so that it is invertible and can therefore be used to generate new data points.
+
+
+\paragraph{Summary}
+
+A normalizing flow model is an invertible function defined by a neural network that allows us to directly model the data density via a change of variables.
+In the general case, the change of variables equation requires us to calculate a highly complex Jacobian determinant, which is impractical for all but the simplest of examples.
+
+To sidestep this issue, the RealNVP model restricts the form of the neural network, such that it adheres to the two essential criteria: it is invertible and has a Jacobian determinant that is easy to compute.
+
+It does this through stacking coupling layers, which produce scale and translation factors at each step.
+Importantly, the coupling layer masks the data as it flows through the network, in a way that ensures that the Jacobian is lower triangular and therefore has a simple-to-compute determinant.
+Full visibility of the input data is achieved through flipping the masks at each layer.
+
+By design, the scale and translation operations can be easily inverted, so that once the model is trained it is possible to run data through the network in reverse.
+This means that we can target the forward transformation process toward a standard Gaussian, which we can easily sample from.
+We can then run the sampled points backward through the network to generate new observations.
+
+
+The RealNVP paper also shows how it is possible to apply this technique to images, by using convolutions inside the coupling layers, rather than densely connected layers.
+The GLOW paper extended this idea to remove the necessity for any hardcoded permutation of the masks.
+The FFJORD model introduced the concept of continuous time normalizing flows, by modeling the transformation process as an ODE defined by a neural network.
+
+Overall, we have seen how normalizing flows are a powerful generative modeling family that can produce high-quality samples, while maintaining the ability to tractably describe the data density function.~\cite{foo2021normalizing}.
+
+
+\section{Energy-Based Models}
+
+
+Energy-based models attempt to model the true data-generating distribution using a \emph{Boltzmann distribution}~\eqref{eq:boltzmann_distribution} where \( E\left( x\right)\) is know as the \emph{energy function} of an observation \( x\).
+
+\begin{equation}
+	p\left(\mathbf{x}\right) = \frac{e^{-E(\mathbf{x})} }{\int_{\mathbf{\hat{x}} \in \mathbf{X}^{e^{-E(\mathbf{\hat{x}})}}}}
+	\label{eq:boltzmann_distribution}
+\end{equation}
+
+\section{Diffusion Models}
+
 
