@@ -372,7 +372,7 @@ The RealNVP paper also shows how it is possible to apply this technique to image
 The GLOW paper extended this idea to remove the necessity for any hardcoded permutation of the masks.
 The FFJORD model introduced the concept of continuous time normalizing flows, by modeling the transformation process as an ODE defined by a neural network.
 
-Overall, we have seen how normalizing flows are a powerful generative modeling family that can produce high-quality samples, while maintaining the ability to tractably describe the data density function.~\cite{foo2021normalizing}.
+Overall, we have seen how normalizing flows are a powerful generative modeling family that can produce high-quality samples, while maintaining the ability to tractably describe the data density function.~\cite{foster2022generative}.
 
 
 \section{Energy-Based Models}
@@ -387,4 +387,69 @@ Energy-based models attempt to model the true data-generating distribution using
 
 \section{Diffusion Models}
 
+\paragraph{\gls{ddm}}
+
+The core idea behind a denoising diffusion model is simple—we train a deep learning model to denoise an image over a series of very small steps.
+
+
+\paragraph{The Forward Diffusion Process}
+
+Suppose we have an image \( \mathbf{x}_{0} \) that we want to corrupt gradually over a large number of steps (\( T= 1000\)), so that eventually it is indistinguishable from standard Gaussian noise (i.e., \( \mathbf{x}_{T} should have zeor mean and unit variance\)). 
+
+
+We can define a function \( q \) that adds a small amount of Gaussian noise with variance \( \beta_{t} \) to an image \( \mathbf{x}_{t-1} \) to generate a new image \( \mathbf{x}_t \). 
+If we keep applying this function, we will generate a sequence of progressively noisier images (\( x_{0}, \ldots x_{T} \)), as shown in~\autoref{fig:forward_diffusion_process}.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/forward_diffusion_process}
+    \end{center}
+    \caption{The forward diffusion process}\label{fig:forward_diffusion_process}
+\end{figure}
+
+
+We can write this update process mathematically as follows (here, \( \epsilon_{t-1} \) is a standard Gaussian with zeor mean and unit variance):
+
+\[
+    \mathbf{x}_t = \sqrt{1 - \beta_t}  \mathbf{x}_{t-1} + \sqrt{\beta_t} \epsilon_{t-1}
+.\] 
+
+Note that we also scale the input image \( \mathbf{x}_{t-1}\), to ensure that the variance of the output image \( \mathbf{x}_t \) remains constant over time. 
+This way, if we normalize our original image \( \mathbf{x}_0 \) to have zeor mean and unit variance, the \( \mathbf{x}_t \) will approximate a standard Gaussian distribution for large enough \( T \), by induction, as follows.
+
+If we assume that \( \mathbf{x}_{t-1} \) has zeor mean and unit variance then \( \sqrt{1 - \beta_t} \mathbf{x}_{t-1} \)  will have variance \( 1- \beta _t \) and \( \sqrt{\beta _t} \epsilon_{t-1}  \) will have variance \( \beta _t \), using the rule that \( \mathrm{Var}\left(aX\right) = a^2 \mathrm{Var}\left(X\right) \).
+Adding these together, we obtain a new distribution \( \mathbf{x}_t \) with zero mean and variance \( 1- \beta _t + \beta _t =  1\), using the rule that \( \mathrm{Var}\left(X+Y\right) = \mathrm{Var}\left(X\right) \mathrm{Var}\left(Y\right)\) for independent \( X \) and \( Y \). 
+Therefore, if \( \mathbf{x}_0 \) is normalized to a zero mean and unit variance, then we guarantee that this is also true for  all \( \mathbf{x}_t \), including the final image \( \mathbf{x}_T \), which will approximate a standard Gaussian distribution.
+This is exactly what we need, as we want to be alble to easily sample \( \mathbf{x}_T \) and then apply a reverse diffusion process through our trained neural network model.
+
+In other words, our forward nosing process \( q \) can also be written as follows:
+
+\[
+    q(\mathbf{x}_t  \mid  \mathbf{x}_{t-1}) = \mathcal{N}(\mathbf{x}_t; \sqrt{1- \beta _t} \mathbf{x}_{t-1}, \beta _t \mathbf{I}) 
+.\] 
+
+\paragraph{The Reparmeaterization Trick}
+
+It would also be useful to be able to jump straight from an image \( \mathbf{x}_0 \) to any noised version of the image \(  \mathbf{x}_t\) without having to go through \( t \) applications of \( q \).
+
+
+If we define \( \alpha = 1 - \beta_t  \) and \( \overline{\alpha}_t  = \prod_{i=1}^{t} \alpha_i \), then we can write the following:
+
+\begin{align*}
+    \mathbf{x}_t &= \sqrt{\alpha_t} \mathbf{x}_{t-1} + \sqrt{1- \alpha_t} \epsilon_{t-1} \\
+                &= \sqrt{\alpha_t \alpha_{t-1}} \mathbf{x}_{t-2} + \sqrt{1- \alpha _t \alpha_{t-1}} \epsilon \\
+                &= \ldots  \\
+                &= \sqrt{\overline{\alpha}_t}  \mathbf{x}_0 + \sqrt{1- \overline{\alpha }_t} \epsilon
+.\end{align*}
+
+
+Note that the second line uses the fact that we can add two Gaussians to obtain a new Gaussian.
+We therefore have have a way to jump from the original image \( \mathbf{x}_0 \) to nay step of the forward diffusion process \( \mathbf{x}_t \).
+Moverover, we can define the diffusion schedule using the \( \overline{\alpha }_t \)values, instead of the original \( \beta _t \) values, with the interpretation that \( \overline{\alpha }_t \) is the variance due to the signal (the original image, \( \mathbf{x}_0 \)) and \( 1 - \overline{\alpha }_t \) is the variance due to the noise (\( \epsilon \)).
+
+The forward diffusion process \( q \) can therefore also be written as follows: 
+
+\[
+    q(\mathbf{x}_t  \mid  \mathbf{x}_0) = \mathcal{N}\left(\mathbf{x}_t; \sqrt{\overline{\alpha }_t } \mathbf{x}_0, (1 - \overline{\alpha }_t) \mathbf{I}\right)
+.\] 
 
