@@ -52,6 +52,9 @@ A big thank you to:
 All the authors, educators, and creators of the resources I've learned from.
 Anyone who takes the time to read, suggest edits, or contribute to these notes.
 
+- https://convertio.co
+- https://pdf.io/pdf2html/
+
 ## License 📜
 
 This work is licensed under a
