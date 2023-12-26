@@ -452,19 +452,118 @@ Moverover, we can define the diffusion schedule using the \( \overline{\alpha }_
 The forward diffusion process \( q \) can therefore also be written as follows:
 
 \[
-	q(\mathbf{x}_t  \mid  \mathbf{x}_0) = \mathcal{N}\left(\mathbf{x}_t; \sqrt{\overline{\alpha }_t } \mathbf{x}_0, (1 - \overline{\alpha }_t) \mathbf{I}\right)
+	q\left(\mathbf{x}_t  \mid  \mathbf{x}_0\right) = \mathcal{N}\left(\mathbf{x}_t; \sqrt{\overline{\alpha }_t } \mathbf{x}_0, \left(1 - \overline{\alpha }_t\right) \mathbf{I}\right)
 	.\]
 
 \paragraph{Diffusion Schedule}
 
+Notice that we are also free to choose a different \( \beta_t \) at each timestep—they don’t all have be the same.
+How the \( \beta_t \) (or \( \hat{\alpha}_t \) ) values change with \( t \) is called the diffusion schedule.
+
+In the original paper~\cite{hoogeboom2021autoregressive}, the authors chose a linear diffusion schedule for \( \beta_t \) that is, \( \beta_t \) increases linearly with \( t \), from  \(  \beta_1 = 0.0001 \) to \( \beta_T = 0.02 \).
+This ensures that in the early stages of the noising process we take smaller noising steps than in the later stages, when the image is already very noisy.
 
 
+In a later paper it was found that a cosine diffusion schedule outperformed the linear schedule from the original paper~\cite{hoogeboom2021autoregressive}.
+A cosine schedule defines the following values of \( \hat{\alpha}_t \):
+
+\[
+	\hat{\alpha}_t = \cos \left(\frac{\pi t}{2T}\right)
+	.\]
+
+The updated equation is therefore as follows (using the trigonometric identity \( \cos ^{2} \left(x\right) + \sin ^2 = 1  \))
+
+\[
+	\mathbf{x}_t = \cos \left(\frac{t}{T} \cdot \frac{\pi }{2}\right) \mathbf{x}_0 + \sin \left(\frac{t}{T} \cdot \frac{\pi}{2}\right) \epsilon
+	.\]
 
 
+This equation is a simplified version of the actual cosine diffusion schedule used in the paper.
+The authors also add an offset term and scaling to prevent the noising steps from being too small at the beginning of the diffusion process.
+We can code up the cosine and offset cosine diffusion schedules as shown below:
+
+\begin{minted}{python}
+def cosine_diffusion_schedule(diffusion_times):
+    signal_rates = tf.cos(diffusion_times * math.pi / 2)
+    noise_rates = tf.sin(diffusion_times * math.pi / 2)
+    return noise_rates, signal_rates
+
+def offset_cosine_diffusion_schedule(diffusion_times):
+    min_signal_rate = 0.02
+    max_signal_rate = 0.95
+    start_angle = tf.acos(max_signal_rate)
+    end_angle = tf.acos(min_signal_rate)
+    diffusion_angles = start_angle + diffusion_times * (end_angle - start_angle)
+    signal_rates = tf.cos(diffusion_angles)
+    noise_rates = tf.sin(diffusion_angles)
+\end{minted}
+
+\paragraph{The Reverse Diffusion Process}
+
+There are many similarities between the the reverse diffusion proceess and the decoder of a variational autoencoder.
 
 
+\paragraph{Sampling from the Denoising Diffusion Model}
+
+In order to sample images from trained model, we need to apply the reverse diffusion process, that is, we need to start with random noise adn use the model to gradually undo the noise, until we are left with recognizable picture of a flower.
+However, we do not want to undo the noise all in one go in which predicting an image from pure random noise in one shot is clearly not going to work.
+We would rather mimic the forward process and undo the predicted noise gradually over many small steps, to allow the model to adjust to its own predictions.
+
+To achieve this, we can jump from \( x_t \) to \( x_{t-1} \) in two steps, first by using our model's noise prediction to calculate an estimate for the original image \( x_{0} \) and the by replying the predicted noise to this image, but only over \( t-1 \) timesteps, to produce \( x_{t-1} \)~\pautoref{fig:one_step_difussion_model}.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/one_step_difussion_model}
+	\end{center}
+	\caption{One step of the sampling process for our diffusion model~\cite{foster2022generative}}\label{fig:one_step_difussion_model}
+\end{figure}
+
+If we repeat this process over a number of steps, we’ll eventually get back to an estimate for \( x_{0} \) that has been guided gradually over many small steps.
+In fact, we are free to choose the number of steps we take, and crucially, it doesn’t have to be the same as the large number of steps in the training noising process (i.e., \num{1,000}).
+It can be much smaller—in this example we choose \num{20}.
+
+The following equation~\cite{song2022denoising} this process mathematicaly:
+
+\[
+	\mathbf{x}_{t-1} = \sqrt{\overline{\alpha}_{t-1}} \left(\frac{\mathbf{x}_t - \sqrt{1- \overline{\alpha }_t} \epsilon ^{(t)}_\theta\left(\mathbf{x}_t\right)  }{\sqrt{\overline{\alpha }_t} }\right) + \sqrt{1 - \overline{\alpha }_{t-1} - \sigma ^2_t } \cdot \epsilon ^{(t)}  _\theta \left(\mathbf{x}_t\right) + \sigma _t \epsilon_t
+	.\]
+
+Let's break this down.
+The first term inside the brackets on the righthand side of the equation is the estimated image \( x_{0} \), calculated using the noist predicted by our network \( \epsilon ^{(t)} _\theta \).
+We then scale this by the \( t-1 \) signal rate \( \sqrt{\overline{\alpha}_t - 1} \) and reapply the predicted noise, but this time scaled by the \( t - 1 \) noise rate \( \sqrt{1 - \overline{\alpha}_{t-1}  \sigma ^2 _t } \).
+Additional Gaussian random noise \( \sigma _t \epsilon_t \) is also added, with the factors \( \sigma _t \) determining how random we want our generation process to be.
+
+The special case \( \sigma _t = 0 \) for all \( t \) corresponds to a type of model known as a \gls{ddim}, introduced by \textcite{song2022denoising}.
+With \gls{ddim}, the generation process is entirely deterministic, which is the same random noise input will always give the same output.
+This is desirable as the we have a well-defined mapping between samples from the latent space and the generated output in pixel space.
 
 
+\paragraph{Analysis of the Diffusion Model}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/samples_from_diffussion_models}
+	\end{center}
+	\caption{Samples from the diffusion model at different epochs of the training process~\cite{foster2022generative}}\label{fig:samples_from_diffussion_models}
+\end{figure}
+
+We can see in~\autoref{fig:samples_from_diffussion_models} that the quality of the generations does indeed improve with the number of diffusion steps.
+With one giant leap from the initial sampled noise, the model can only predict a hazy blob of color.
+With more steps, the model is able to refine and sharpen its generations.
+However, the time taken to generate the images scales linearly with the number of diffusion steps, so there is a trade-off.
+There is minimal improvement between \num{20} and \num{100} diffusion steps, so we choose \num{20} as a reasonable compromise between quality and speed in this example~\cite{foster2022generative}.
+
+The reverse diffusion process is parameterized by a U-Net that tries to predict the noise at each timestep, given the noised image and the noise rate at that step.
+A U-Net consists of DownBlocks that increase the number of channels while reducing the size of the image and UpBlocks that decrease the number of channels while increasing the size.
+The noise rate is encoded using sinusoidal embedding~\cite{foster2022generative}.
+
+Sampling from the diffusion model is conducted over a series of steps.
+The U-Net is used to predict the noise added to a given noised image, which is then used to calculate an estimate for the original image.
+The predicted noise is then reapplied using a smaller noise rate.
+This process is repeated over a series of steps (which may be significantly smaller than the number of steps used during training), starting from a random point sampled from a standard Gaussian noise distribution, to obtain the final generation~\cite{foster2022generative}.
+
+We saw how increasing the number of diffusion steps in the reverse process improves the image generation quality, at the expense of speed.
+We also performed latent space arithmetic in order to interpolate between two images~\cite{foster2022generative}.
 
 
 
