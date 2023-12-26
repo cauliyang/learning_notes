@@ -565,5 +565,43 @@ This process is repeated over a series of steps (which may be significantly smal
 We saw how increasing the number of diffusion steps in the reverse process improves the image generation quality, at the expense of speed.
 We also performed latent space arithmetic in order to interpolate between two images~\cite{foster2022generative}.
 
+\section{Transformers}
 
+A recurrent layer tries to build up a generic hidden state that captures an overall representation of the input at each timestep.
+A weakness of this approach is that many of the words that have already been incorporated into the hidden vector will not be directly relevant to the immediate task at hand (e.g., predicting the next word), as we have just seen.
+Attention heads do not suffer from this problem, because they can pick and choose how to combine information from nearby words, depending on the context.
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/attention_1}
+	\end{center}
+	\caption{The mechanics of an attention head~\cite{foster2022generative}}\label{fig:attention_1}
+\end{figure}
+
+
+The query (\(Q\)) can be thought of as a representation of the current task at hand (e.g., ``What word follows too?'').
+In this example, it is derived from the embedding of the word too, by passing it through a weights matrix \( W_Q \) to change the dimensionality of the vector from \( d_e \) to \( d_k \)~\pautoref{fig:attention_1}.
+
+The key vectors (\( K \)) are representations of each word in the sentence—you can think of these as descriptions of the kinds of prediction tasks that each word can help with.
+They are derived in a similar fashion to the query, by passing each embedding through a weights matrix \( W_K \) to change the dimensionality of each vector from \( d_e \) to \( d_k \).
+Notice that the keys and the query are the same length (\( d_k \)).
+
+
+Inside the attention head, each key is compared to the query using a dot product between each pair of vectors (\( QK^{T} \)).
+This is why the keys and the query have to be the same length.
+The higher this number is for a particular key/query pair, the more the key resonates with the query, so it is allowed to make more of a contribution to the output of the attention head.
+The resulting vector is scaled by  \( \sqrt{d_k} \) to keep the variance of the vector sum stable (approximately equal to 1), and a softmax is applied to ensure the contributions sum to 1.
+This is a vector of \emph{attention weights}.
+
+The value vectors (\( V \)) are also representations of the words in the sentence—you can think of these as the unweighted contributions of each word.
+They are derived by passing each embedding through a weights matrix \( W_V \) to change the dimensionality of each vector from  \( d_e \)to \( d_v \).
+Notice that the value vectors do not necessarily have to have the same length as the keys and query (but often do, for simplicity).
+
+The value vectors are multiplied by the attention weights to give the attention for a given \( Q \), \( K \), and \( V \), as shown in~\autoref{eq:attention}.
+
+\begin{equation}
+    \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)V
+    \label{eq:attention}
+\end{equation}
 
