@@ -579,7 +579,6 @@ Attention heads do not suffer from this problem, because they can pick and choos
 	\caption{The mechanics of an attention head~\cite{foster2022generative}}\label{fig:attention_1}
 \end{figure}
 
-
 The query (\(Q\)) can be thought of as a representation of the current task at hand (e.g., ``What word follows too?'').
 In this example, it is derived from the embedding of the word too, by passing it through a weights matrix \( W_Q \) to change the dimensionality of the vector from \( d_e \) to \( d_k \)~\pautoref{fig:attention_1}.
 
@@ -626,39 +625,50 @@ For example Google’s \gls{bert} predicts masked words within a given sentence,
 We will explore the different types of Transformers in more detail at the end of the chapter.
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{figures/causal_mask}
-    \end{center}
-    \caption{Matrix calculation of the attention scores for a batch of input queries, using a causal attention mask to hide keys that are not available to the query (because they come later in the sentence)}\label{fig:causal_mask}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/causal_mask}
+	\end{center}
+	\caption{Matrix calculation of the attention scores for a batch of input queries, using a causal attention mask to hide keys that are not available to the query (because they come later in the sentence)}\label{fig:causal_mask}
 \end{figure}
-
 
 This concludes our explanation of the multihead attention mechanism that is present in all Transformers.
 It is remarkable that the learnable parameters of such an influential layer consist of nothing more than three densely connected weights matrices for each attention head ( \( W_Q, W_K, W_V \)) and one further weights matrix to reshape the output (\( W_O \)).
 There are no convolutions or recurrent mechanisms at all in a multihead attention layer!
 
-\paragraph{The Transformer Block~\cite{fig:transformer_block}}
+\paragraph{The Transformer Block~\pautoref{fig:transformer_block}}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{figures/transformer_block}
-    \end{center}
-    \caption{A Transformer Block~\cite{foster2022generative}}\label{fig:transformer_block}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/transformer_block}
+	\end{center}
+	\caption{A Transformer Block~\cite{foster2022generative}}\label{fig:transformer_block}
 \end{figure}
 
 In contrast, layer normalization in a Transformer block normalizes each position of each sequence in the batch by calculating the normalizing statistics across the channels.
 It is the complete opposite of batch normalization, in terms of how the normalization statistics are calculated.
 A diagram showing the difference between batch normalization and layer normalization is shown in~\autoref{fig:layer_norm}.
 
-
 Layer normalization was used in the original GPT paper and is commonly used for text-based tasks to avoid creating normalization dependencies across sequences in the batch~\autoref{fig:layer_norm}.
 However, recent work such as \textcite{shen2020powernorm} challenges this assumption, showing that with some tweaks a form of batch normalization can still be used within Transformers, outperforming more traditional layer normalization.
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{figures/layer_norm}
-    \end{center}
-    \caption{Layer normalization versus batch normalization—the normalization statistics are calculated across the blue cells~\cite{shen2020powernorm}}\label{fig:layer_norm}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/layer_norm}
+	\end{center}
+	\caption{Layer normalization versus batch normalization—the normalization statistics are calculated across the blue cells~\cite{shen2020powernorm}}\label{fig:layer_norm}
 \end{figure}
+
+\paragraph{Positional Embeddings}
+
+To construct the joint token–position encoding, the token embedding is added to the positional embedding, as shown in~\autoref{fig:positional_embedding}.
+This way, the meaning and position of each word in the sequence are captured in a single vector.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/positional_embedding}
+	\end{center}
+	\caption{The token embeddings are added to the positional embeddings to give the token position encoding~\autoref{fig:positional_embedding}}\label{fig:positional_embedding}
+\end{figure}
+
 
 

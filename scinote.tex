@@ -1,7 +1,27 @@
 \documentclass{scinote}
 
-%%%%%%%%%%%%%%%%%%% tikz %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%% patch for \inputminted with \import %%%%%%%%%%%%%%%%%
+% source : https://github.com/gpoore/minted/issues/251
+\usepackage{xpatch}
+\makeatletter
+% fix for first kind
+\xpatchcmd\inputminted
+  {#3}
+  {\import@path #3}
+  {}{\fail}
 
+% fix for second kind
+\xpretocmd\minted@pygmentize
+  {\restore@IfFileExists} % direct \let\IfFileExists\im@@IfFileExists works too
+  {}{\fail}
+\def\restore@IfFileExists{%
+  \ifx\IfFileExists\@iffileonpath
+    \let\IfFileExists\im@@IfFileExists
+  \fi
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%% tikz %%%%%%%%%%%%%%%%%
 \usepackage{standalone}
 \usepackage{tkz-graph}
 \usetikzlibrary{calc}
@@ -17,12 +37,13 @@
 %%%%%%%%%%%%%%%%%%% math %%%%%%%%%%%%%%%%%
 \usepackage{fixmath}
 \usepackage{mathtools}
-%%%%%%%%%%%%%%%%%%% biblatex %%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%%% glossaries %%%%%%%%%%%%%%%%%
 \input{glossaries}
 \makeglossaries
-%%%%%%%%%%%%%%%%%%%%% glossaries %%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%% macros %%%%%%%%%%%%%%%%%
 
 \input{macros}
 
@@ -94,6 +115,7 @@
 \import{chapter/programming/}{leetcode}
 \import{chapter/programming/}{cpp}
 \import{chapter/programming/}{rust}
+\import{chapter/programming/}{python}
 
 \part{Research}
 \import{chapter/research/}{paper_writing}
