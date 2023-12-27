@@ -601,7 +601,64 @@ Notice that the value vectors do not necessarily have to have the same length as
 The value vectors are multiplied by the attention weights to give the attention for a given \( Q \), \( K \), and \( V \), as shown in~\autoref{eq:attention}.
 
 \begin{equation}
-    \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)V
-    \label{eq:attention}
+	\mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)V
+	\label{eq:attention}
 \end{equation}
+
+\paragraph{Multi-Head Attention}
+
+The concatenated outputs are passed through one final weights matrix \(W_O\) to project the vector into the desired output dimension, which in our case is the same as the input dimension of the query (\( d_e \)), so that the layers can be stacked sequentially on top of each other~\pautoref{fig:multi_head}.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/multi_head}
+	\end{center}
+	\caption{The Multi-Head Attention}\label{fig:multi_head}
+\end{figure}
+
+\paragraph{Causal Masking}
+
+Causal masking is only required in decoder Transformers such as GPT, where the task is to sequentially generate tokens given previous tokens.
+Masking out future tokens during training is therefore essential~\pautoref{fig:causal_mask}.
+
+Other flavors of Transformer (e.g., encoder Transformers) do not need causal masking, because they are not trained to predict the next token~\cite{vaswani2017attention}.
+For example Google’s \gls{bert} predicts masked words within a given sentence, so it can use context from both before and after the word in question.
+We will explore the different types of Transformers in more detail at the end of the chapter.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/causal_mask}
+    \end{center}
+    \caption{Matrix calculation of the attention scores for a batch of input queries, using a causal attention mask to hide keys that are not available to the query (because they come later in the sentence)}\label{fig:causal_mask}
+\end{figure}
+
+
+This concludes our explanation of the multihead attention mechanism that is present in all Transformers.
+It is remarkable that the learnable parameters of such an influential layer consist of nothing more than three densely connected weights matrices for each attention head ( \( W_Q, W_K, W_V \)) and one further weights matrix to reshape the output (\( W_O \)).
+There are no convolutions or recurrent mechanisms at all in a multihead attention layer!
+
+\paragraph{The Transformer Block~\cite{fig:transformer_block}}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/transformer_block}
+    \end{center}
+    \caption{A Transformer Block~\cite{foster2022generative}}\label{fig:transformer_block}
+\end{figure}
+
+In contrast, layer normalization in a Transformer block normalizes each position of each sequence in the batch by calculating the normalizing statistics across the channels.
+It is the complete opposite of batch normalization, in terms of how the normalization statistics are calculated.
+A diagram showing the difference between batch normalization and layer normalization is shown in~\autoref{fig:layer_norm}.
+
+
+Layer normalization was used in the original GPT paper and is commonly used for text-based tasks to avoid creating normalization dependencies across sequences in the batch~\autoref{fig:layer_norm}.
+However, recent work such as \textcite{shen2020powernorm} challenges this assumption, showing that with some tweaks a form of batch normalization can still be used within Transformers, outperforming more traditional layer normalization.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/layer_norm}
+    \end{center}
+    \caption{Layer normalization versus batch normalization—the normalization statistics are calculated across the blue cells~\cite{shen2020powernorm}}\label{fig:layer_norm}
+\end{figure}
+
 
