@@ -1,15 +1,13 @@
-\chapter{Notes}\label{chap:Notes}
+\chapter{Machine Learning Concepts}\label{chap:Notes}
 
 \section{Complexity of matrix multiply}\label{sec:Complexity of matrix multiply}
 
 Assume $\mathbf{A}$ is $m\times n$ and $\mathbf{B}$ is $n\times p$.
 The naive algorithm takes $O\left(mnp\right)$ time.
 
-
 \section{Representation of matrix}\label{sec:Representation of matrix}
 
 Row major, col major, stride
-
 
 \paragraph{How to calculate dimension of convolutional layer}
 
@@ -17,9 +15,7 @@ Row major, col major, stride
 
 In which  \(n_h\)  means height of input, \(k_h\) means height of filter, \(p_h\) means padding of height, \(s_h\) means stride of height. So as \(n_w\), \(k_w\), \(p_w\), \(s_w\).
 
-
 \section{Training Tricks}\label{sec:Training Tricks}
-
 
 \paragraph{Batch normalization}
 
@@ -32,7 +28,6 @@ The solution is surprisingly simple.
 During training, a batch normalization layer calculates the mean and standard deviation of each of its input channels across the batch and normalizes by subtracting the mean and dividing by the standard deviation.
 There are then two learned parameters for each channel, the scale (gamma) and shift (beta)~\cref{fig:batch_normalization}.
 The output is simply the normalized input, scaled by gamma and shifted by beta~\cite{foster2022generative}.
-
 
 When it comes to prediction, we may only want to predict a single observation, so there is no batch over which to calculate the mean and standard deviation.
 To get around this problem, during training a batch normalization layer also calculates the moving average of the mean and standard deviation of each channel and stores this value as part of the layer to use at test time~\cite{foster2022generative}.
@@ -48,9 +43,7 @@ In total, this gives four parameters for each channel in the preceding layer, wh
 	\caption{Batch Normalization}\label{fig:batch_normalization}
 \end{figure}
 
-
 \paragraph{Transposed Convolution}
-
 
 Ignoring channels for now, let’s begin with the basic transposed convolution operation with stride of 1 and no padding.
 Suppose that we are given a input tensor \( n_{h} \times n_{w} \) and a  kernel \( k_{h} \times  k_{w} \).
@@ -68,10 +61,8 @@ In the end, all the intermediate results are summed over to produce the output~\
 	\caption{Transposed Convolution~\cite[Chapter~14.10]{zhang2023dive}}\label{fig:trans_conv}
 \end{figure}
 
-
 Different from in the regular convolution where padding is applied to input, it is applied to output in the transposed convolution.
 For example, when specifying the padding number on either side of the height and width as 1, the first and last rows and columns will be removed from the transposed convolution output.
-
 
 \begin{figure}
 	\begin{center}
@@ -80,10 +71,44 @@ For example, when specifying the padding number on either side of the height and
 	\caption{Transposed convolution with a kernel with stride of \( 2 \times 2 \). The shaded portions are a portion of an intermediate tensor as well as the input and kernel tensor elements used for the computation.~\cite{zhang2023dive}}\label{fig:trans_conv_stide}
 \end{figure}
 
-
 Consider implementing the convolution by multiplying matrices.
 Given an input vector \( \mathbf{x} \) and a weight matrix \( \mathbf{W} \), the forward propagation function of the convolution can be implemented by multiplying its input with the weight matrix and outputting a vector \( y = \mathbf{W}\mathbf{x} \).
 Since backpropagation follows the chain rule and \( \nabla_{x}\mathbf{y} = \mathbf{W}^{\top}\), the backpropagation function of the convolution can be implemented by multiplying its input with the transposed weight matrix \( \mathbf{W}^{\top}\) .
 Therefore, the transposed convolutional layer can just exchange the forward propagation function and the backpropagation function of the convolutional layer: its forward propagation and backpropagation functions multiply their input vector with \( \mathbf{W}^{\top}  \) and \( \mathbf{W} \), respectively~\cite{zhang2023dive}.
+
+\paragraph{Softmax vs LogSoftmax}
+
+The softmax function is used to convert a vector of values to a probability distribution.
+The probabilities of each value are proportional to the exponential of the original values. The softmax function for a vector \( \mathbf{z} \) is defined as:
+
+\[ \mathrm{softmax}(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}} \]
+
+where \( \mathbf{z} \) is the input vector, \( K \) is the number of classes (or the length of the vector), \( z_i \) is the \( i^{th} \) element of the input vector, and \( e \) is the base of the natural logarithm.
+
+The \emph{log\_softmax} function is essentially the logarithm of the softmax function.
+It's defined as:
+
+\[ \mathrm{log\_softmax}(\mathbf{z})_i = \log\left(\frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}\right) \]
+
+Using the property of logarithms that \( \log(a/b) = \log(a) - \log(b) \), this can be simplified to:
+
+\[ \mathrm{log\_softmax}(\mathbf{z})_i = z_i - \log\left(\sum_{j=1}^{K} e^{z_j}\right) \]
+
+When you're training a model using a loss function like Negative Log-Likelihood (NLL), the combination of \emph{log\_softmax} and NLL can be computed more efficiently and with better numerical stability.
+The NLL for a true class \( c \) and predicted log probabilities \( \log(p_i) \) is:
+
+\[ \mathrm{NLL} = -\log(p_c) \]
+
+When you use the output from \emph{log\_softmax} in the NLL loss, you get:
+
+\[ \mathrm{NLL} = -\log\left(\frac{e^{z_c}}{\sum_{j=1}^{K} e^{z_j}}\right) \]
+
+which simplifies to:
+
+\[ \mathrm{NLL} = -z_c + \log\left(\sum_{j=1}^{K} e^{z_j}\right) \]
+
+This form is more numerically stable and efficient for computers to calculate, especially for large vectors where values of \( e^{z_j} \) can become very large or small, leading to floating-point precision issues.
+
+In summary, using \emph{log\_softmax} provides a more numerically stable and computationally efficient way to handle the softmax outputs, especially when combined with loss functions like NLL during model training.
 
 

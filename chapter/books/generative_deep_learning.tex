@@ -1,5 +1,4 @@
 \chapter{Generative Deep Learning}\label{chp:generative_deep_learning}
-
 \minitoc
 
 \section{Intro to Deep Generative Models}
@@ -43,7 +42,6 @@ Discriminative models vs Generative models
 
 
 If you do choose to use batch normalization before activation, you can remember the order using the acronym \textbf{BAD (batch normalization, activation, then dropout)}
-
 
 \section{Variational Autoencoders}
 
@@ -262,7 +260,6 @@ If you use word tokens:
 	\item  Using word tokenization means that the model will never be able to predict words outside of the training vocabulary.
 \end{itemize}
 
-
 If you use character tokens:
 
 \begin{itemize}
@@ -273,9 +270,7 @@ If you use character tokens:
 	\item The vocabulary is usually much smaller when using character tokenization. This is beneficial for model training speed as there are fewer weights to learn in the final output layer.
 \end{itemize}
 
-
 \paragraph{\gls{lstm}}
-
 
 A recurrent layer has the special property of being able to process sequential input data \(x_{1}, \ldots , x_{n} \).
 It consists of a cell that updates its hidden state, \( h_{t}\), as each element of the sequence \( x_{t} \) is passed through it, one timestep at a time.
@@ -329,7 +324,6 @@ The hidden state is updated in six steps~\pautoref{fig:lstm_cell}:
 
 \paragraph{\gls{gru}}
 
-
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{figures/gru}
@@ -344,7 +338,6 @@ The key differences from the \gls{lstm} unit are as follows:
 	\item The forget and input gates are replaced by reset and update gates.
 	\item There is no cell state or output gate, only a hidden state that is output from the cell.
 \end{enumerate}
-
 
 \section{Normalizing Flow Models}
 
@@ -369,13 +362,11 @@ By design, the scale and translation operations can be easily inverted, so that 
 This means that we can target the forward transformation process toward a standard Gaussian, which we can easily sample from.
 We can then run the sampled points backward through the network to generate new observations.
 
-
 The RealNVP paper also shows how it is possible to apply this technique to images, by using convolutions inside the coupling layers, rather than densely connected layers.
 The GLOW paper extended this idea to remove the necessity for any hardcoded permutation of the masks.
 The FFJORD model introduced the concept of continuous time normalizing flows, by modeling the transformation process as an ODE defined by a neural network.
 
 Overall, we have seen how normalizing flows are a powerful generative modeling family that can produce high-quality samples, while maintaining the ability to tractably describe the data density function.~\cite{foster2022generative}.
-
 
 \section{Energy-Based Models}
 
@@ -529,7 +520,7 @@ The following equation~\cite{song2022denoising} this process mathematicaly:
 	.\]
 
 Let's break this down.
-The first term inside the brackets on the righthand side of the equation is the estimated image \( x_{0} \), calculated using the noist predicted by our network \( \epsilon ^{(t)} _\theta \).
+The first term inside the brackets on the righthand side of the equation is the estimated image \( x_{0} \), calculated using the noise predicted by our network \( \epsilon ^{(t)} _\theta \).
 We then scale this by the \( t-1 \) signal rate \( \sqrt{\overline{\alpha}_t - 1} \) and reapply the predicted noise, but this time scaled by the \( t - 1 \) noise rate \( \sqrt{1 - \overline{\alpha}_{t-1}  \sigma ^2 _t } \).
 Additional Gaussian random noise \( \sigma _t \epsilon_t \) is also added, with the factors \( \sigma _t \) determining how random we want our generation process to be.
 
@@ -670,5 +661,77 @@ This way, the meaning and position of each word in the sequence are captured in 
 	\caption{The token embeddings are added to the positional embeddings to give the token position encoding~\autoref{fig:positional_embedding}}\label{fig:positional_embedding}
 \end{figure}
 
+\paragraph{Summary}
+
+Attention heads can be grouped together to form what is known as a multihead attention layer.
+These are then wrapped up inside a Transformer block, which includes layer normalization and skip connections around the attention layer.
+Transformer blocks can be stacked to create very deep neural networks.
+
+Causal masking is used to ensure that \gls{gpt} cannot leak information from downstream tokens into the current prediction.
+Also, a technique known as positional encoding is used to ensure that the ordering of the input sequence is not lost, but instead is baked into the input alongside the traditional word embedding.
+
+When analyzing the output from \gls{gpt}, we saw it was possible not only to generate new text passages, but also to interrogate the attention layer of the network to understand where in the sentence it is looking to gather information to improve its prediction.
+GPT can access information at a distance without loss of signal, because the attention scores are calculated in parallel and do not rely on a hidden state that is carried through the network sequentially, as is the case with recurrent neural networks.
+
+We saw how there are three families of Transformers (encoder, decoder, and encoder-decoder) and the different tasks that can be accomplished with each.
+
+\paragraph{The Illustrated Transformer~\cite{alammar2018illustrated}}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{figures/self-attention-output}
+    \end{center}
+    \caption{Self-attention Output}\label{fig:self-attention-output}
+\end{figure}
+
+Matrix calculation of self-attention is shown in~\autoref{fig:self-attention-matrix-calculation}.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{figures/self-attention-matrix-calculation}
+    \end{center}
+    \caption{Self-attention Matrix Calculation}\label{fig:self-attention-matrix-calculation}
+\end{figure}
+
+Finally, since we’re dealing with matrices, we can condense steps two through six in one formula to calculate the outputs of the self-attention layer.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{figures/self-attention-matrix-calculation-2}
+    \end{center}
+    \caption{Self-attention Matrix Calculation}\label{fig:self-attention-matrix-calculation-2}
+\end{figure}
+
+Let me try to put them all in one visual so we can look at them in one place~\pautoref{fig:self-attention-matrix-calculation-2}.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{figures/transformer_multi-headed_self-attention-recap}
+    \end{center}
+    \caption{Transformer Multi-headed Self-attention Recap}\label{fig:transformer_multi-headed_self-attention-recap}
+\end{figure}
+
+\section{Advanced \glspl{gan}}
+
+The \href{https://github.com/hindupuravinash/the-gan-zoo}{\gls{gan} Zoo GitHub repository} is a great resource for exploring the different types of \glspl{gan} that have been proposed over the years.
+
+\paragraph{\gls{progan}}
+
+\gls{progan} is a technique developed by NVIDIA Labs in 2017 to improve both the speed and stability of \gls{gan} training.
+Instead of immediately training a \gls{gan} on fullresolution images, the \gls{progan} paper suggests first training the generator and discriminator on low-resolution images of, say, \( 4 \times  4 \) pixels and then incrementally adding layers throughout the training process to increase the resolution.
+
+In a normal \gls{gan}, the generator always outputs full-resolution images, even in the early stages of training.
+It is reasonable to think that this strategy might not be optimal—the generator might be slow to learn high-level structures in the early stages of training, because it is immediately operating over complex, high-resolution images.
+Wouldn’t it be better to first train a lightweight \gls{gan} to output accurate low-resolution images and then see if we can build on this to gradually increase the resolution?
+
+This simple idea leads us to progressive training, one of the key contributions of the \gls{progan} paper.
+The \gls{progan} is trained in stages, starting with a training set that has been condensed down to \( 4 \times   4 \) pixel images using interpolation, as shown in~\autoref{fig:progan}.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figures/progan}
+    \end{center}
+    \caption{Images in the dataset can be compressed to lower resolution using interpolation}\label{fig:progan}
+\end{figure}
 
 
