@@ -678,44 +678,44 @@ We saw how there are three families of Transformers (encoder, decoder, and encod
 \paragraph{The Illustrated Transformer~\cite{alammar2018illustrated}}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.9\textwidth]{figures/self-attention-output}
-    \end{center}
-    \caption{Self-attention Output}\label{fig:self-attention-output}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/self-attention-output}
+	\end{center}
+	\caption{Self-attention Output}\label{fig:self-attention-output}
 \end{figure}
 
 Matrix calculation of self-attention is shown in~\autoref{fig:self-attention-matrix-calculation}.
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.9\textwidth]{figures/self-attention-matrix-calculation}
-    \end{center}
-    \caption{Self-attention Matrix Calculation}\label{fig:self-attention-matrix-calculation}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/self-attention-matrix-calculation}
+	\end{center}
+	\caption{Self-attention Matrix Calculation}\label{fig:self-attention-matrix-calculation}
 \end{figure}
 
 Finally, since we’re dealing with matrices, we can condense steps two through six in one formula to calculate the outputs of the self-attention layer.
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.9\textwidth]{figures/self-attention-matrix-calculation-2}
-    \end{center}
-    \caption{Self-attention Matrix Calculation}\label{fig:self-attention-matrix-calculation-2}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/self-attention-matrix-calculation-2}
+	\end{center}
+	\caption{Self-attention Matrix Calculation}\label{fig:self-attention-matrix-calculation-2}
 \end{figure}
 
 Let me try to put them all in one visual so we can look at them in one place~\pautoref{fig:self-attention-matrix-calculation-2}.
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.9\textwidth]{figures/transformer_multi-headed_self-attention-recap}
-    \end{center}
-    \caption{Transformer Multi-headed Self-attention Recap}\label{fig:transformer_multi-headed_self-attention-recap}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/transformer_multi-headed_self-attention-recap}
+	\end{center}
+	\caption{Transformer Multi-headed Self-attention Recap}\label{fig:transformer_multi-headed_self-attention-recap}
 \end{figure}
 
 \section{Advanced \glspl{gan}}
 
 The \href{https://github.com/hindupuravinash/the-gan-zoo}{\gls{gan} Zoo GitHub repository} is a great resource for exploring the different types of \glspl{gan} that have been proposed over the years.
 
-\paragraph{\gls{progan}}
+\paragraph{\gls{progan}~\cite{Karras2018Feb}}
 
 \gls{progan} is a technique developed by NVIDIA Labs in 2017 to improve both the speed and stability of \gls{gan} training.
 Instead of immediately training a \gls{gan} on fullresolution images, the \gls{progan} paper suggests first training the generator and discriminator on low-resolution images of, say, \( 4 \times  4 \) pixels and then incrementally adding layers throughout the training process to increase the resolution.
@@ -728,10 +728,40 @@ This simple idea leads us to progressive training, one of the key contributions 
 The \gls{progan} is trained in stages, starting with a training set that has been condensed down to \( 4 \times   4 \) pixel images using interpolation, as shown in~\autoref{fig:progan}.
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{figures/progan}
-    \end{center}
-    \caption{Images in the dataset can be compressed to lower resolution using interpolation}\label{fig:progan}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{figures/progan}
+	\end{center}
+	\caption{Images in the dataset can be compressed to lower resolution using interpolation}\label{fig:progan}
 \end{figure}
 
+Features:
+
+\begin{itemize}
+	\item Progressive training
+	\item Minibatch standard deviation
+	\item Equalized learning rate
+	\item Pixelwise feature vector normalization
+	\item Scaled images and pixel values
+\end{itemize}
+
+\paragraph{\gls{stylegan}~\cite{karras2018tyle}}
+
+\gls{stylegan} is a \gls{gan} architecture from 2018 that builds on the earlier ideas in the \gls{progan} paper.
+In fact, the discriminator is identical; only the generator is changed~\pautoref{fig:stylegan}.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/stylegan.png}
+	\end{center}
+	\caption{The \gls{stylegan} Generator Architecture}\label{fig:stylegan}
+\end{figure}
+
+Features:
+
+\begin{itemize}
+	\item The Mapping Network
+	\item The Adaptive Instance Normalization Layer
+	\item The Style Mixing Regularization
+	\item Stochastic Variation
+\end{itemize}
 
