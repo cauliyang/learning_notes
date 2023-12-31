@@ -768,10 +768,25 @@ Features:
 \paragraph{\gls{stylegan}2}
 
 \begin{itemize}
-	\item  Weight Modulation and Demodulation
+	\item Weight Modulation and Demodulation
 	\item Path Length Regularization
 	\item No Progressive Growing
 \end{itemize}
 
+\paragraph{Summary}
+
+We started by exploring the concept of progressive training that was pioneered in the 2017 \gls{progan} paper~\cite{Karras2018Feb}.
+Several key changes were introduced in the 2018 \gls{stylegan} paper that gave greater control over the image output, such as the mapping network for creating a specific style vector and synthesis network that allowed the style to be injected at different resolutions.
+Finally, \gls{stylegan}2 replaced the adaptive instance normalization of \gls{stylegan} with weight modulation and demodulation steps, alongside additional enhancements such as path regularization.
+The paper also showed how the desirable property of gradual resolution refinement could be retained without having to the train the network progressively.
+
+We also saw how the concept of attention could be built into a \gls{gan}, with the introduction of \gls{sagan} in 2018~\cite{zhang2019selfattention}.
+This allows the network to capture long-range dependencies, such as similar background colors over opposite sides of an image, without relying on deep convolutional maps to spread the information over the spatial dimensions of the image.
+BigGAN was an extension of this idea that made several key changes and trained a larger network to improve the image quality further~\cite{brock2019large}.
+
+In the VQ-GAN paper, the authors show how several different types of generative models can be combined to great effect.
+Building on the original VQ-VAE paper that introduced the concept of a VAE with a discrete latent space, VQ-GAN additionally includes a discriminator that encourages the VAE to generate less blurry images through an additional adversarial loss term.
+An autoregressive Transformer is used to construct a novel sequence of code tokens that can be decoded by the VAE decoder to produce novel images.
+The ViT VQ-GAN paper extends this idea even further, by replacing the convolutional encoder and decoder of VQ-GAN with Transformers.
 
 
