@@ -784,9 +784,12 @@ We also saw how the concept of attention could be built into a \gls{gan}, with t
 This allows the network to capture long-range dependencies, such as similar background colors over opposite sides of an image, without relying on deep convolutional maps to spread the information over the spatial dimensions of the image.
 BigGAN was an extension of this idea that made several key changes and trained a larger network to improve the image quality further~\cite{brock2019large}.
 
-In the VQ-GAN paper, the authors show how several different types of generative models can be combined to great effect.
-Building on the original VQ-VAE paper that introduced the concept of a VAE with a discrete latent space, VQ-GAN additionally includes a discriminator that encourages the VAE to generate less blurry images through an additional adversarial loss term.
-An autoregressive Transformer is used to construct a novel sequence of code tokens that can be decoded by the VAE decoder to produce novel images.
-The ViT VQ-GAN paper extends this idea even further, by replacing the convolutional encoder and decoder of VQ-GAN with Transformers.
+In the \gls{vqgan} paper, the authors show how several different types of generative models can be combined to great effect.
+Building on the original \gls{vqvae} paper that introduced the concept of a \gls{vae} with a discrete latent space, \gls{vqgan} additionally includes a discriminator that encourages the \gls{vae} to generate less blurry images through an additional adversarial loss term.
+An autoregressive Transformer is used to construct a novel sequence of code tokens that can be decoded by the \gls{vae}decoder to produce novel images.
+The \gls{vitvqgan} paper extends this idea even further, by replacing the convolutional encoder and decoder of \gls{vqgan} with Transformers.
+
+
+
 
 
