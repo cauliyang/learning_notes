@@ -53,7 +53,6 @@ To compute each intermediate tensor, each element in the input tensor is multipl
 Note that the position of the replaced portion in each intermediate tensor corresponds to the position of the element in the input tensor used for the computation.
 In the end, all the intermediate results are summed over to produce the output~\cite[Chapter~14.10]{zhang2023dive}.
 
-
 \begin{figure}
 	\begin{center}
 		\includesvg[width=0.95\textwidth]{figures/trans_conv}
@@ -111,4 +110,11 @@ This form is more numerically stable and efficient for computers to calculate, e
 
 In summary, using \emph{log\_softmax} provides a more numerically stable and computationally efficient way to handle the softmax outputs, especially when combined with loss functions like NLL during model training.
 
+\paragraph{Temperature in Softmax}
+
+Temperature is a hyperparameter that controls the steepness of the softmax function.
+
+\[
+    \mathrm{softmax}(\mathbf{z})_i = \frac{e^{z_i/T}}{\sum_{j=1}^{K} e^{z_j/T}}
+.\]
 

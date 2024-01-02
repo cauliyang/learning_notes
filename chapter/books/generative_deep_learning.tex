@@ -8,9 +8,7 @@ What is Generative Modeling?
 Generative modeling can be broadly defined as follows:
 Generative modeling is a branch of machine learning that involves training a model to produce new data that is similar to a given dataset~\cite{foster2022generative}.
 
-Discriminative models vs Generative models
-
-\paragraph{The Generative Modeling Framework}
+Discriminative models vs Generative models \paragraph{The Generative Modeling Framework}
 
 \begin{itemize}
 	\item We have a dataset of Observations $\mathbf{X}$. \item We assume that the observations have been generated according to some unknown distribution \(\mathcal{P}_{\textrm{data}}\)
@@ -786,10 +784,56 @@ BigGAN was an extension of this idea that made several key changes and trained a
 
 In the \gls{vqgan} paper, the authors show how several different types of generative models can be combined to great effect.
 Building on the original \gls{vqvae} paper that introduced the concept of a \gls{vae} with a discrete latent space, \gls{vqgan} additionally includes a discriminator that encourages the \gls{vae} to generate less blurry images through an additional adversarial loss term.
-An autoregressive Transformer is used to construct a novel sequence of code tokens that can be decoded by the \gls{vae}decoder to produce novel images.
+An autoregressive Transformer is used to construct a novel sequence of code tokens that can be decoded by the \gls{vae} decoder to produce novel images.
 The \gls{vitvqgan} paper extends this idea even further, by replacing the convolutional encoder and decoder of \gls{vqgan} with Transformers.
 
 
+\section{Music Generation}
 
+One of the most popular techniques for music generation is the Transformer, as music can be thought of as a sequence prediction problem.
+These models have been adapted to generate music by treating musical notes as a sequence of tokens, similar to words in a sentence.
+The Transformer model learns to predict the next note in the sequence based on the previous notes, resulting in a generated piece of music.
+
+\gls{musegan} takes a totally different approach to generating music~\cite{dong2017musegan}.
+Unlike Transformers, which generate music note by note, \gls{musegan} generates entire musical tracks at once by treating music as an image, consisting of a pitch axis and a time axis.
+Moreover, \gls{musegan} separates out different musical components such as chords, style, melody, and groove so that they can be controlled independently.
+
+
+\paragraph{Sine Positional Embeddings}
+
+Using simple Embedding layer to encode the position of each token, effectively mapping each integer position to a distinct vector that was learned by the model.
+We therefore needed to define a maximum length ( \( N \)) that the sequence could be and train on this length of sequence.
+The downside to this approach is that it is then impossible to extrapolate to sequences that are longer than this maximum length.
+You would have to clip the input to the last \( N \) tokens, which isn’t ideal if you are trying to generate long-form content.
+
+
+To circumvent this problem, we can switch to using a different type of embedding called a sine position embedding.
+This is similar to the embedding to encode the noise variances of the diffusion model.
+Specifically, the following function is used to convert the position of the word ( pos) in the input sequence into a unique vector of length \( d \):
+
+\[
+	\mathrm{PE}_{\left(pos, 2i\right)} = \sin \left(\frac{pos}{10000^{2i/d}}\right)
+	.\]
+
+\[
+	\mathrm{PE}_{\left(pos, 2i+1\right)} = \cos \left(\frac{pos}{10000^{\left(2i+1\right)/d}}\right)
+	.\]
+
+For small \( i \), the wavelength of this function is short and therefore the function value changes rapidly along the position axis.
+Larger values of \( i \) create a longer wavelength.
+Each position thus has its own unique encoding, which is a specific combination of the different wavelengths.
+
+\textcolor{red}{Notice that this embedding is defined for all possible position values. It is a deterministic function (i.e., it isn’t learned by the model) that uses trigonometric functions to define a unique encoding for each possible position.}
+
+\paragraph{Multiple Inputs and Outputs}
+
+There are many ways of handling the dual stream of inputs.
+We could create tokens that represent each note–duration pair and then treat the sequence as a single stream of tokens.
+However, this has the downside of not being able to represent note–duration pairs that have not been seen in the training set.
+
+An alternative approach would be to interleave the note and duration tokens into a single stream of input and let the model learn that the output should be a single stream where the note and duration tokens alternate.
+This comes with the added complexity of ensuring that the output can still be parsed when the model has not yet learned how to interleave the tokens correctly.
+
+\textcolor{red}{There is no right or wrong way to design your model—part of the fun is experimenting with different setups and seeing which works best for you!}
 
 
